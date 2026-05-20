@@ -1,0 +1,3089 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>燕赵遗韵 - 河北非遗文化传承</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        /* ========== CSS Variables ========== */
+        :root {
+            --primary: #1a1a1a;
+            --secondary: #f5f5f0;
+            --accent: #c9a86c;
+            --accent-light: #e8d5b5;
+            --accent-dark: #a88a4e;
+            --text-primary: #1a1a1a;
+            --text-secondary: #666666;
+            --text-light: #999999;
+            --bg-primary: #fafaf8;
+            --bg-secondary: #f0f0ec;
+            --bg-dark: #1a1a1a;
+            --border: #e5e5e0;
+            --card-bg: #ffffff;
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.04);
+            --shadow-md: 0 4px 20px rgba(0,0,0,0.08);
+            --shadow-lg: 0 8px 40px rgba(0,0,0,0.12);
+            --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            --navbar-height: 70px;
+            --bottomnav-height: 72px;
+        }
+
+        /* ========== Dark Theme ========== */
+        [data-theme="dark"] {
+            --primary: #f5f5f0;
+            --secondary: #2a2a2a;
+            --accent: #d4b87a;
+            --accent-light: #3d3525;
+            --accent-dark: #c9a86c;
+            --text-primary: #e8e8e4;
+            --text-secondary: #aaaaaa;
+            --text-light: #777777;
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #242424;
+            --bg-dark: #111111;
+            --border: #333333;
+            --card-bg: #2a2a2a;
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.2);
+            --shadow-md: 0 4px 20px rgba(0,0,0,0.3);
+            --shadow-lg: 0 8px 40px rgba(0,0,0,0.4);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+            transition: background 0.4s ease, color 0.4s ease;
+        }
+
+        /* ========== Reading Progress Bar ========== */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), var(--accent-dark));
+            z-index: 10000;
+            transition: width 0.1s linear;
+            width: 0%;
+        }
+
+        /* ========== Loader ========== */
+        .loader {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: var(--bg-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
+        }
+        .loader.hidden { opacity: 0; visibility: hidden; }
+        .loader-content { text-align: center; }
+        .loader-text {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--primary);
+            letter-spacing: 0.5em;
+            animation: fadeInUp 1s ease forwards;
+        }
+        .loader-line {
+            width: 60px; height: 2px;
+            background: var(--accent);
+            margin: 20px auto;
+            animation: expandLine 1.5s ease infinite;
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes expandLine {
+            0%, 100% { width: 0; opacity: 0; }
+            50% { width: 60px; opacity: 1; }
+        }
+
+        /* ========== Navbar ========== */
+        .navbar {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            height: var(--navbar-height);
+            background: rgba(250, 250, 248, 0.92);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px;
+            border-bottom: 1px solid transparent;
+            transition: all var(--transition-normal), background 0.4s ease;
+        }
+        [data-theme="dark"] .navbar {
+            background: rgba(26, 26, 26, 0.92);
+        }
+        .navbar.scrolled {
+            border-bottom-color: var(--border);
+            box-shadow: var(--shadow-sm);
+        }
+        .logo {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: color 0.4s ease;
+        }
+        .logo-icon {
+            width: 36px; height: 36px;
+            background: var(--accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            color: white;
+        }
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            list-style: none;
+            align-items: center;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-size: 0.88rem;
+            font-weight: 500;
+            position: relative;
+            transition: color var(--transition-fast);
+            padding: 8px 0;
+        }
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0;
+            width: 0; height: 2px;
+            background: var(--accent);
+            transition: width var(--transition-normal);
+        }
+        .nav-links a:hover { color: var(--primary); }
+        .nav-links a:hover::after,
+        .nav-links a.active::after { width: 100%; }
+        .nav-links a.active { color: var(--primary); }
+
+        /* Theme toggle button */
+        .theme-toggle {
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            border: 2px solid var(--border);
+            background: var(--card-bg);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: all var(--transition-normal);
+            color: var(--text-primary);
+        }
+        .theme-toggle:hover {
+            border-color: var(--accent);
+            transform: rotate(30deg);
+        }
+
+        /* ========== Main Content ========== */
+        .main-content {
+            padding-top: var(--navbar-height);
+            padding-bottom: var(--bottomnav-height);
+            min-height: 100vh;
+        }
+        .section {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ========== Hero Section ========== */
+        .hero {
+            min-height: calc(100vh - var(--navbar-height));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            padding: 60px 40px;
+        }
+        .hero-bg {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+            transition: background 0.4s ease;
+        }
+        #heroCanvas {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 1;
+        }
+        .hero-pattern {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            z-index: 1;
+        }
+        .hero-content {
+            text-align: center;
+            max-width: 900px;
+            z-index: 2;
+            position: relative;
+        }
+        .hero-subtitle {
+            font-size: 0.85rem;
+            letter-spacing: 0.3em;
+            color: var(--accent);
+            text-transform: uppercase;
+            margin-bottom: 24px;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease 0.3s forwards;
+        }
+        .hero-title {
+            font-family: 'Noto Serif SC', serif;
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 24px;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease 0.5s forwards;
+        }
+        .hero-title span { display: block; color: var(--accent); }
+        .hero-description {
+            font-size: 1.05rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 40px;
+            min-height: 1.8em;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease 0.7s forwards;
+        }
+        .typewriter-cursor {
+            display: inline-block;
+            width: 2px;
+            height: 1.1em;
+            background: var(--accent);
+            margin-left: 2px;
+            vertical-align: text-bottom;
+            animation: blink-cursor 0.8s step-end infinite;
+        }
+        @keyframes blink-cursor {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        .hero-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 40px;
+            background: var(--primary);
+            color: var(--bg-primary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            border-radius: 50px;
+            transition: all var(--transition-normal);
+            opacity: 0;
+            animation: fadeInUp 0.8s ease 0.9s forwards;
+            cursor: pointer;
+            border: none;
+        }
+        .hero-cta:hover {
+            background: var(--accent);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 80px;
+            margin-top: 80px;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease 1.1s forwards;
+        }
+        .stat-item { text-align: center; }
+        .stat-number {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--primary);
+            line-height: 1;
+            transition: color 0.4s ease;
+        }
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-top: 8px;
+            letter-spacing: 0.1em;
+        }
+
+        /* ========== Heritage Showcase ========== */
+        .heritage-showcase {
+            padding: 100px 40px;
+            background: var(--bg-primary);
+            transition: background 0.4s ease;
+        }
+        .section-header {
+            text-align: center;
+            margin-bottom: 70px;
+        }
+        .section-tag {
+            font-size: 0.75rem;
+            letter-spacing: 0.3em;
+            color: var(--accent);
+            text-transform: uppercase;
+            margin-bottom: 16px;
+        }
+        .section-title {
+            font-family: 'Noto Serif SC', serif;
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+        .section-desc {
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* ========== 3D Flip Cards ========== */
+        .heritage-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 30px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .flip-card {
+            perspective: 1200px;
+            height: 480px;
+            cursor: pointer;
+        }
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-style: preserve-3d;
+        }
+        .flip-card:hover .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            transition: box-shadow var(--transition-normal);
+        }
+        .flip-card:hover .flip-card-front,
+        .flip-card:hover .flip-card-back {
+            box-shadow: var(--shadow-lg);
+        }
+        .flip-card-front {
+            background: var(--card-bg);
+            transition: background 0.4s ease;
+        }
+        .flip-card-back {
+            background: var(--card-bg);
+            transform: rotateY(180deg);
+            padding: 36px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            transition: background 0.4s ease;
+        }
+        .flip-card-front .card-image-wrap {
+            width: 100%;
+            height: 280px;
+            overflow: hidden;
+            position: relative;
+        }
+        .flip-card-front .card-image-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+        .flip-card:hover .flip-card-front .card-image-wrap img {
+            transform: scale(1.05);
+        }
+        .flip-card-front .card-content {
+            padding: 24px 28px;
+        }
+        .card-location {
+            font-size: 0.75rem;
+            letter-spacing: 0.15em;
+            color: var(--accent);
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+        .card-title {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        .card-desc {
+            font-size: 0.88rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+        .card-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 16px;
+            border-top: 1px solid var(--border);
+            margin-top: 16px;
+        }
+        .card-level {
+            font-size: 0.75rem;
+            padding: 5px 14px;
+            background: var(--bg-secondary);
+            border-radius: 20px;
+            color: var(--text-secondary);
+            transition: background 0.4s ease;
+        }
+        .card-arrow {
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            background: var(--bg-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all var(--transition-fast);
+        }
+        .flip-card:hover .card-arrow {
+            background: var(--accent);
+            color: white;
+        }
+        .flip-card-back .back-title {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--accent);
+        }
+        .flip-card-back .back-history {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+        .flip-card-back .back-detail-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 24px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 0.88rem;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+        .flip-card-back .back-detail-btn:hover {
+            background: var(--accent-dark);
+            transform: translateY(-2px);
+        }
+
+        /* Mouse glow effect on cards */
+        .flip-card .card-glow {
+            position: absolute;
+            width: 200px; height: 200px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(201,168,108,0.15) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 10;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            transform: translate(-50%, -50%);
+        }
+        .flip-card:hover .card-glow { opacity: 1; }
+
+        /* ========== Detail Modal ========== */
+        .detail-modal {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 5000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s ease;
+            backdrop-filter: blur(8px);
+        }
+        .detail-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .detail-modal-content {
+            background: var(--card-bg);
+            border-radius: 24px;
+            max-width: 800px;
+            width: 92%;
+            max-height: 85vh;
+            overflow-y: auto;
+            transform: translateY(40px) scale(0.95);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+        .detail-modal.active .detail-modal-content {
+            transform: translateY(0) scale(1);
+        }
+        .detail-modal-close {
+            position: absolute;
+            top: 20px; right: 20px;
+            width: 44px; height: 44px;
+            border-radius: 50%;
+            background: rgba(0,0,0,0.5);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            transition: all var(--transition-fast);
+        }
+        .detail-modal-close:hover {
+            background: var(--accent);
+            transform: rotate(90deg);
+        }
+        .detail-modal-image {
+            width: 100%;
+            height: 360px;
+            object-fit: cover;
+            border-radius: 24px 24px 0 0;
+        }
+        .detail-modal-body {
+            padding: 40px;
+        }
+        .detail-modal-body .detail-location {
+            font-size: 0.8rem;
+            letter-spacing: 0.2em;
+            color: var(--accent);
+            margin-bottom: 8px;
+        }
+        .detail-modal-body .detail-title {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .detail-modal-body .detail-level-badge {
+            display: inline-block;
+            padding: 6px 16px;
+            background: var(--accent);
+            color: white;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-bottom: 24px;
+        }
+        .detail-modal-body .detail-desc {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            line-height: 1.9;
+            margin-bottom: 28px;
+        }
+        .detail-modal-body .detail-section-title {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--accent);
+        }
+        .detail-modal-body .detail-history {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 28px;
+            padding: 20px;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            border-left: 4px solid var(--accent);
+            transition: background 0.4s ease;
+        }
+        .detail-modal-body .detail-inheritor {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 20px;
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            transition: background 0.4s ease;
+        }
+        .detail-inheritor-avatar {
+            width: 56px; height: 56px;
+            border-radius: 50%;
+            background: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            flex-shrink: 0;
+        }
+        .detail-inheritor-info h4 {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        .detail-inheritor-info p {
+            font-size: 0.88rem;
+            color: var(--text-secondary);
+        }
+
+        /* ========== Gallery Section ========== */
+        .gallery-section {
+            padding: 100px 40px;
+            background: var(--bg-primary);
+            transition: background 0.4s ease;
+        }
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: auto auto;
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .gallery-item {
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+            box-shadow: var(--shadow-sm);
+        }
+        .gallery-item:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-lg);
+        }
+        .gallery-item:first-child {
+            grid-column: span 2;
+            grid-row: span 2;
+        }
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.6s ease;
+        }
+        .gallery-item:hover img {
+            transform: scale(1.08);
+        }
+        .gallery-item .gallery-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 24px;
+            background: linear-gradient(transparent, rgba(0,0,0,0.7));
+            color: #fff;
+            transform: translateY(100%);
+            transition: transform var(--transition-normal);
+        }
+        .gallery-item:hover .gallery-overlay {
+            transform: translateY(0);
+        }
+        .gallery-overlay h4 {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 1.1rem;
+            margin-bottom: 4px;
+        }
+        .gallery-overlay p {
+            font-size: 0.85rem;
+            opacity: 0.85;
+        }
+
+        /* ========== Map Section ========== */
+        .map-section {
+            padding: 100px 40px;
+            background: var(--bg-secondary);
+            transition: background 0.4s ease;
+        }
+        .map-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 60px;
+            align-items: center;
+        }
+        .map-info h3 {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+        .map-info p {
+            color: var(--text-secondary);
+            margin-bottom: 30px;
+            line-height: 1.8;
+        }
+        .region-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .region-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px 18px;
+            background: var(--card-bg);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            border: 2px solid transparent;
+        }
+        .region-item:hover, .region-item.active {
+            border-color: var(--accent);
+            box-shadow: var(--shadow-md);
+        }
+        .region-dot {
+            width: 10px; height: 10px;
+            border-radius: 50%;
+            background: var(--accent);
+            flex-shrink: 0;
+        }
+        .region-name { font-weight: 500; flex: 1; }
+        .region-count { font-size: 0.82rem; color: var(--text-light); }
+        .map-visual {
+            position: relative;
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: var(--shadow-md);
+            min-height: 480px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.4s ease;
+        }
+        .hebei-map { width: 100%; max-width: 480px; }
+        .map-point {
+            cursor: pointer;
+            transition: r 0.3s ease, fill 0.3s ease;
+        }
+        .map-point:hover {
+            r: 12;
+            fill: var(--accent-dark);
+        }
+        @keyframes mapPulse {
+            0% { r: 8; opacity: 1; }
+            50% { r: 16; opacity: 0.3; }
+            100% { r: 8; opacity: 0; }
+        }
+        .map-point-pulse {
+            fill: var(--accent);
+            animation: mapPulse 2s ease-out infinite;
+            pointer-events: none;
+        }
+
+        /* ========== City Info Popup ========== */
+        .city-popup-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.4);
+            z-index: 5000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all var(--transition-normal);
+            backdrop-filter: blur(4px);
+        }
+        .city-popup-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        .city-popup {
+            position: fixed;
+            bottom: 0; left: 0;
+            width: 100%;
+            max-width: 520px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100%);
+            background: var(--card-bg);
+            border-radius: 24px 24px 0 0;
+            z-index: 5001;
+            transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1);
+            box-shadow: 0 -8px 40px rgba(0,0,0,0.15);
+            overflow: hidden;
+        }
+        .city-popup.show {
+            transform: translateX(-50%) translateY(0);
+        }
+        .city-popup-handle {
+            width: 40px; height: 4px;
+            background: var(--border);
+            border-radius: 2px;
+            margin: 12px auto 0;
+        }
+        .city-popup-header {
+            padding: 20px 28px 16px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .city-popup-icon {
+            width: 48px; height: 48px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            flex-shrink: 0;
+        }
+        .city-popup-title {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 1.4rem;
+            font-weight: 600;
+        }
+        .city-popup-subtitle {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+        .city-popup-body {
+            padding: 0 28px 20px;
+        }
+        .city-popup-desc {
+            font-size: 0.92rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+        .city-popup-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+        .city-popup-tag {
+            padding: 6px 14px;
+            background: var(--bg-secondary);
+            border-radius: 20px;
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+            transition: background 0.4s ease;
+        }
+        .city-popup-actions {
+            display: flex;
+            gap: 12px;
+        }
+        .city-popup-btn {
+            flex: 1;
+            padding: 14px 20px;
+            border: none;
+            border-radius: 14px;
+            font-size: 0.92rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-family: inherit;
+        }
+        .city-popup-btn-primary {
+            background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+            color: #fff;
+        }
+        .city-popup-btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(201,168,108,0.4);
+        }
+        .city-popup-btn-secondary {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            transition: background 0.4s ease, color 0.4s ease;
+        }
+        .city-popup-btn-secondary:hover {
+            background: var(--border);
+        }
+        .city-popup-close {
+            position: absolute;
+            top: 16px; right: 20px;
+            width: 32px; height: 32px;
+            border: none;
+            background: var(--bg-secondary);
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1rem;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all var(--transition-fast);
+        }
+        .city-popup-close:hover {
+            background: var(--border);
+            color: var(--text-primary);
+        }
+
+        /* ========== Timeline ========== */
+        .timeline-section {
+            padding: 100px 40px;
+            background: var(--bg-primary);
+            transition: background 0.4s ease;
+        }
+        .timeline {
+            max-width: 1000px;
+            margin: 0 auto;
+            position: relative;
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%; top: 0; bottom: 0;
+            width: 2px;
+            background: var(--border);
+            transform: translateX(-50%);
+        }
+        .timeline-item {
+            display: flex;
+            justify-content: flex-end;
+            padding-right: 50%;
+            position: relative;
+            margin-bottom: 50px;
+        }
+        .timeline-item:nth-child(even) {
+            justify-content: flex-start;
+            padding-right: 0;
+            padding-left: 50%;
+        }
+        .timeline-content {
+            max-width: 400px;
+            padding: 28px;
+            background: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: var(--shadow-sm);
+            margin-right: 40px;
+            transition: all var(--transition-normal);
+        }
+        .timeline-item:nth-child(even) .timeline-content {
+            margin-right: 0;
+            margin-left: 40px;
+        }
+        .timeline-content:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-4px);
+        }
+        .timeline-dot {
+            position: absolute;
+            left: 50%; top: 28px;
+            width: 16px; height: 16px;
+            background: var(--accent);
+            border-radius: 50%;
+            transform: translateX(-50%);
+            border: 4px solid var(--bg-primary);
+            transition: border-color 0.4s ease;
+        }
+        .timeline-year {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--accent);
+            margin-bottom: 8px;
+        }
+        .timeline-title { font-weight: 600; margin-bottom: 8px; }
+        .timeline-desc {
+            font-size: 0.88rem;
+            color: var(--text-secondary);
+        }
+
+        /* ========== AI Section ========== */
+        .ai-section {
+            padding: 100px 40px;
+            background: var(--bg-primary);
+            min-height: calc(100vh - var(--navbar-height));
+            transition: background 0.4s ease;
+        }
+        .ai-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 30px;
+            height: calc(100vh - 280px);
+        }
+        .ai-sidebar {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+            transition: background 0.4s ease;
+        }
+        .ai-avatar {
+            width: 90px; height: 90px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            margin: 0 auto 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.2rem;
+        }
+        .ai-name {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 1.2rem;
+            text-align: center;
+            margin-bottom: 6px;
+        }
+        .ai-role {
+            text-align: center;
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+        }
+        .ai-features {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .ai-feature {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            border-radius: 10px;
+            transition: all var(--transition-fast);
+            cursor: pointer;
+        }
+        .ai-feature:hover { background: var(--bg-secondary); }
+        .ai-feature-icon {
+            width: 34px; height: 34px;
+            border-radius: 10px;
+            background: var(--accent-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+        .ai-chat {
+            background: var(--card-bg);
+            border-radius: 20px;
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transition: background 0.4s ease;
+        }
+        .chat-header {
+            padding: 18px 28px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .chat-status {
+            width: 8px; height: 8px;
+            background: #4ade80;
+            border-radius: 50%;
+            animation: blink 2s infinite;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .chat-messages {
+            flex: 1;
+            padding: 24px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .message {
+            max-width: 80%;
+            padding: 14px 18px;
+            border-radius: 16px;
+            animation: messageIn 0.3s ease;
+        }
+        @keyframes messageIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .message.ai {
+            align-self: flex-start;
+            background: var(--bg-secondary);
+            border-bottom-left-radius: 4px;
+        }
+        .message.user {
+            align-self: flex-end;
+            background: var(--primary);
+            color: var(--bg-primary);
+            border-bottom-right-radius: 4px;
+        }
+        .chat-input-area {
+            padding: 18px 24px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 10px;
+        }
+        .chat-input {
+            flex: 1;
+            padding: 12px 18px;
+            border: 2px solid var(--border);
+            border-radius: 50px;
+            font-size: 0.92rem;
+            transition: all var(--transition-fast);
+            outline: none;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+        }
+        .chat-input:focus { border-color: var(--accent); }
+        .chat-send {
+            width: 48px; height: 48px;
+            border-radius: 50%;
+            background: var(--accent);
+            border: none;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all var(--transition-fast);
+            font-size: 1.1rem;
+        }
+        .chat-send:hover {
+            background: var(--accent-dark);
+            transform: scale(1.05);
+        }
+
+        /* ========== Games Section ========== */
+        .games-section {
+            padding: 100px 40px;
+            background: var(--bg-secondary);
+            min-height: calc(100vh - var(--navbar-height));
+            transition: background 0.4s ease;
+        }
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 28px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .game-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 36px;
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+            transition: all var(--transition-normal);
+            cursor: pointer;
+        }
+        .game-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+        }
+        .game-icon {
+            width: 76px; height: 76px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, var(--accent-light), var(--accent));
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.2rem;
+        }
+        .game-title {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+        }
+        .game-desc {
+            color: var(--text-secondary);
+            font-size: 0.88rem;
+            margin-bottom: 22px;
+        }
+        .game-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 11px 26px;
+            background: var(--primary);
+            color: var(--bg-primary);
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 0.88rem;
+            font-weight: 500;
+            transition: all var(--transition-fast);
+            border: none;
+            cursor: pointer;
+        }
+        .game-btn:hover { background: var(--accent); color: white; }
+
+        /* Game Modal */
+        .game-modal {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 4000;
+            backdrop-filter: blur(10px);
+        }
+        .game-modal.active { display: flex; }
+        .game-modal-content {
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: 36px;
+            max-width: 600px;
+            width: 92%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            transition: background 0.4s ease;
+        }
+        .game-modal-close {
+            position: absolute;
+            top: 18px; right: 18px;
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            background: var(--bg-secondary);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: all var(--transition-fast);
+        }
+        .game-modal-close:hover {
+            background: var(--accent);
+            color: white;
+        }
+
+        /* Quiz */
+        .quiz-container { text-align: center; }
+        .quiz-progress {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 28px;
+        }
+        .quiz-dot {
+            width: 10px; height: 10px;
+            border-radius: 50%;
+            background: var(--border);
+            transition: all var(--transition-fast);
+        }
+        .quiz-dot.active { background: var(--accent); transform: scale(1.2); }
+        .quiz-dot.correct { background: #4ade80; }
+        .quiz-dot.wrong { background: #f87171; }
+        .quiz-question {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 1.25rem;
+            margin-bottom: 28px;
+            line-height: 1.6;
+        }
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .quiz-option {
+            padding: 14px 22px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: transparent;
+            color: var(--text-primary);
+        }
+        .quiz-option:hover {
+            border-color: var(--accent);
+            background: var(--bg-secondary);
+        }
+        .quiz-option.correct {
+            border-color: #4ade80;
+            background: rgba(74, 222, 128, 0.1);
+        }
+        .quiz-option.wrong {
+            border-color: #f87171;
+            background: rgba(248, 113, 113, 0.1);
+        }
+        .quiz-option-letter {
+            width: 30px; height: 30px;
+            border-radius: 50%;
+            background: var(--bg-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.88rem;
+            flex-shrink: 0;
+        }
+        .quiz-score {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 16px;
+        }
+
+        /* ========== Profile Section ========== */
+        .profile-section {
+            padding: 100px 40px;
+            background: var(--bg-primary);
+            min-height: calc(100vh - var(--navbar-height));
+            transition: background 0.4s ease;
+        }
+        .profile-container { max-width: 1000px; margin: 0 auto; }
+        .profile-header {
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: 36px;
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            align-items: center;
+            gap: 28px;
+            margin-bottom: 28px;
+            transition: background 0.4s ease;
+        }
+        .profile-avatar {
+            width: 90px; height: 90px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.2rem;
+            color: white;
+        }
+        .profile-info h2 {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 1.6rem;
+            margin-bottom: 6px;
+        }
+        .profile-info p { color: var(--text-secondary); }
+        .profile-stats {
+            display: flex;
+            gap: 36px;
+            margin-left: auto;
+        }
+        .profile-stat { text-align: center; }
+        .profile-stat-value {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+        .profile-stat-label {
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+        }
+        .profile-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 28px;
+        }
+        .profile-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+            transition: background 0.4s ease;
+        }
+        .profile-card h3 {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 1.15rem;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .achievement-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .achievement-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            transition: all var(--transition-fast);
+        }
+        .achievement-item:hover { transform: translateX(4px); }
+        .achievement-icon {
+            width: 44px; height: 44px;
+            border-radius: 12px;
+            background: var(--accent-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+        }
+        .achievement-item.locked .achievement-icon {
+            background: var(--border);
+            opacity: 0.5;
+        }
+        .achievement-info h4 { font-weight: 600; margin-bottom: 3px; }
+        .achievement-info p { font-size: 0.82rem; color: var(--text-secondary); }
+        .history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .history-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px;
+            border-bottom: 1px solid var(--border);
+        }
+        .history-item:last-child { border-bottom: none; }
+        .history-image {
+            width: 56px; height: 56px;
+            border-radius: 10px;
+            object-fit: cover;
+        }
+        .history-info { flex: 1; }
+        .history-info h4 { font-weight: 600; margin-bottom: 3px; }
+        .history-info p { font-size: 0.82rem; color: var(--text-secondary); }
+        .history-date { font-size: 0.78rem; color: var(--text-light); }
+
+        /* ========== Bottom Nav ========== */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0; left: 0; right: 0;
+            height: var(--bottomnav-height);
+            background: var(--card-bg);
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            z-index: 1000;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.05);
+            transition: background 0.4s ease, border-color 0.4s ease;
+        }
+        .bottom-nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            text-decoration: none;
+            color: var(--text-secondary);
+            border: none;
+            background: none;
+            font-size: 0.72rem;
+            font-family: inherit;
+        }
+        .bottom-nav-item:hover,
+        .bottom-nav-item.active { color: var(--accent); }
+        .bottom-nav-icon {
+            width: 26px; height: 26px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            transition: transform var(--transition-fast);
+        }
+        .bottom-nav-item:hover .bottom-nav-icon,
+        .bottom-nav-item.active .bottom-nav-icon {
+            transform: translateY(-2px);
+        }
+
+        /* ========== Toast ========== */
+        .toast {
+            position: fixed;
+            bottom: calc(var(--bottomnav-height) + 20px);
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--primary);
+            color: var(--bg-primary);
+            padding: 14px 28px;
+            border-radius: 50px;
+            font-size: 0.88rem;
+            opacity: 0;
+            transition: all var(--transition-normal);
+            z-index: 3000;
+            white-space: nowrap;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* ========== Scroll Animations ========== */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .fade-in-left {
+            opacity: 0;
+            transform: translateX(-40px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        .fade-in-left.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        .fade-in-right {
+            opacity: 0;
+            transform: translateX(40px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        .fade-in-right.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* ========== Lazy Load Image ========== */
+        .lazy-img {
+            opacity: 0;
+            transition: opacity 0.6s ease;
+        }
+        .lazy-img.loaded {
+            opacity: 1;
+        }
+
+        /* ========== Responsive ========== */
+        @media (max-width: 1024px) {
+            .navbar { padding: 0 24px; }
+            .nav-links { display: none; }
+            .hero { padding: 40px 24px; }
+            .hero-stats { gap: 40px; }
+            .heritage-showcase, .gallery-section, .map-section, .timeline-section,
+            .ai-section, .games-section, .profile-section {
+                padding: 70px 24px;
+            }
+            .map-container { grid-template-columns: 1fr; }
+            .ai-container {
+                grid-template-columns: 1fr;
+                height: auto;
+            }
+            .ai-sidebar { display: none; }
+            .profile-content { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 768px) {
+            .hero-title { font-size: 2rem; }
+            .hero-stats {
+                flex-direction: column;
+                gap: 24px;
+            }
+            .heritage-grid { grid-template-columns: 1fr; }
+            .gallery-grid { grid-template-columns: 1fr; }
+            .gallery-item:first-child { grid-column: span 1; grid-row: span 1; }
+            .flip-card { height: 440px; }
+            .timeline::before { left: 20px; }
+            .timeline-item,
+            .timeline-item:nth-child(even) {
+                padding-left: 56px;
+                padding-right: 0;
+                justify-content: flex-start;
+            }
+            .timeline-content,
+            .timeline-item:nth-child(even) .timeline-content {
+                margin-left: 0;
+                margin-right: 0;
+            }
+            .timeline-dot { left: 20px; }
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            .profile-stats {
+                margin-left: 0;
+                margin-top: 18px;
+            }
+            .bottom-nav-item { padding: 10px 14px; }
+            .detail-modal-image { height: 240px; }
+            .detail-modal-body { padding: 24px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Reading Progress Bar -->
+    <div class="progress-bar" id="progressBar"></div>
+
+    <!-- Loader -->
+    <div class="loader" id="loader">
+        <div class="loader-content">
+            <div class="loader-text">燕赵遗韵</div>
+            <div class="loader-line"></div>
+        </div>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="navbar" id="navbar">
+        <a href="#" class="logo">
+            <div class="logo-icon">遗</div>
+            <span>燕赵遗韵</span>
+        </a>
+        <ul class="nav-links">
+            <li><a href="#home" class="nav-link active" data-section="home">首页</a></li>
+            <li><a href="#heritage" class="nav-link" data-section="heritage">非遗项目</a></li>
+            <li><a href="#map" class="nav-link" data-section="map">文化地图</a></li>
+            <li><a href="#ai" class="nav-link" data-section="ai">智能体</a></li>
+            <li><a href="#games" class="nav-link" data-section="games">互动游戏</a></li>
+            <li><a href="#profile" class="nav-link" data-section="profile">个人中心</a></li>
+        </ul>
+        <button class="theme-toggle" id="themeToggle" title="切换主题">&#9790;</button>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- ========== Home Section ========== -->
+        <section class="section active" id="home">
+            <div class="hero" id="heroSection">
+                <div class="hero-bg"></div>
+                <canvas id="heroCanvas"></canvas>
+                <div class="hero-pattern"></div>
+
+                <div class="hero-content" id="heroContent">
+                    <div class="hero-subtitle">Intangible Cultural Heritage</div>
+                    <h1 class="hero-title">
+                        传承千年文化
+                        <span>守护燕赵记忆</span>
+                    </h1>
+                    <p class="hero-description" id="heroDesc"></p>
+                    <button class="hero-cta" onclick="scrollToSection('heritage')">
+                        探索非遗
+                        <span>&#8594;</span>
+                    </button>
+
+                    <div class="hero-stats">
+                        <div class="stat-item">
+                            <div class="stat-number" data-count="163">0</div>
+                            <div class="stat-label">国家级非遗</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number" data-count="990">0</div>
+                            <div class="stat-label">省级非遗</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number" data-count="11">0</div>
+                            <div class="stat-label">设区市</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- ========== Heritage Section ========== -->
+        <section class="section" id="heritage">
+            <div class="heritage-showcase">
+                <div class="section-header fade-in">
+                    <div class="section-tag">Heritage Collection</div>
+                    <h2 class="section-title">非遗瑰宝</h2>
+                    <p class="section-desc">精选河北各地代表性非物质文化遗产项目，展现燕赵文化的独特魅力</p>
+                </div>
+
+                <div class="heritage-grid" id="heritageGrid">
+                    <!-- Cards generated by JS -->
+                </div>
+            </div>
+
+            <!-- Gallery: 中华非遗精粹 -->
+            <div class="gallery-section">
+                <div class="section-header fade-in">
+                    <div class="section-tag">Folk Art Gallery</div>
+                    <h2 class="section-title">中华非遗精粹</h2>
+                    <p class="section-desc">来自全国各地的非物质文化遗产，感受中华传统文化的博大精深</p>
+                </div>
+                <div class="gallery-grid fade-in">
+                    <div class="gallery-item">
+                        <img src="images/embroidery-costume.jpg" alt="少数民族刺绣服饰">
+                        <div class="gallery-overlay">
+                            <h4>少数民族刺绣</h4>
+                            <p>精美绝伦的民族刺绣工艺，承载着千年文化记忆</p>
+                        </div>
+                    </div>
+                    <div class="gallery-item">
+                        <img src="images/yingge-dance.jpg" alt="英歌舞表演">
+                        <div class="gallery-overlay">
+                            <h4>英歌舞</h4>
+                            <p>潮汕地区传统民俗舞蹈，刚柔并济的非遗表演</p>
+                        </div>
+                    </div>
+                    <div class="gallery-item">
+                        <img src="images/opera-face.jpg" alt="川剧变脸喷火">
+                        <div class="gallery-overlay">
+                            <h4>川剧变脸</h4>
+                            <p>中国戏曲绝技，瞬间变换脸谱的神秘艺术</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========== Map Section ========== -->
+        <section class="section" id="map">
+            <div class="map-section">
+                <div class="section-header fade-in">
+                    <div class="section-tag">Cultural Map</div>
+                    <h2 class="section-title">文化地图</h2>
+                    <p class="section-desc">探索河北各地非遗分布，点击城市了解更多文化瑰宝</p>
+                </div>
+
+                <div class="map-container">
+                    <div class="map-info fade-in-left">
+                        <h3>探索燕赵大地</h3>
+                        <p>河北历史悠久，文化底蕴深厚，各地都有独特的非物质文化遗产。从北部的张家口到南部的邯郸，每一处都承载着独特的文化记忆。</p>
+                        <div class="region-list">
+                            <div class="region-item active" data-region="zhangjiakou" data-lat="40.8242" data-lng="114.8865">
+                                <div class="region-dot"></div>
+                                <span class="region-name">张家口</span>
+                                <span class="region-count">蔚县剪纸等 12项</span>
+                            </div>
+                            <div class="region-item" data-region="chengde" data-lat="40.9762" data-lng="117.9626">
+                                <div class="region-dot"></div>
+                                <span class="region-name">承德</span>
+                                <span class="region-count">满族文化等 15项</span>
+                            </div>
+                            <div class="region-item" data-region="qinhuangdao" data-lat="39.9354" data-lng="119.5976">
+                                <div class="region-dot"></div>
+                                <span class="region-name">秦皇岛</span>
+                                <span class="region-count">孟姜女传说等 8项</span>
+                            </div>
+                            <div class="region-item" data-region="tangshan" data-lat="39.6309" data-lng="118.1802">
+                                <div class="region-dot"></div>
+                                <span class="region-name">唐山</span>
+                                <span class="region-count">皮影戏等 18项</span>
+                            </div>
+                            <div class="region-item" data-region="langfang" data-lat="39.5426" data-lng="116.6838">
+                                <div class="region-dot"></div>
+                                <span class="region-name">廊坊</span>
+                                <span class="region-count">京东大鼓等 10项</span>
+                            </div>
+                            <div class="region-item" data-region="baoding" data-lat="38.8740" data-lng="115.4646">
+                                <div class="region-dot"></div>
+                                <span class="region-name">保定</span>
+                                <span class="region-count">曲阳石雕等 22项</span>
+                            </div>
+                            <div class="region-item" data-region="cangzhou" data-lat="38.3037" data-lng="116.8386">
+                                <div class="region-dot"></div>
+                                <span class="region-name">沧州</span>
+                                <span class="region-count">吴桥杂技等 16项</span>
+                            </div>
+                            <div class="region-item" data-region="hengshui" data-lat="37.7392" data-lng="115.6658">
+                                <div class="region-dot"></div>
+                                <span class="region-name">衡水</span>
+                                <span class="region-count">内画等 14项</span>
+                            </div>
+                            <div class="region-item" data-region="xingtai" data-lat="37.0682" data-lng="114.5048">
+                                <div class="region-dot"></div>
+                                <span class="region-name">邢台</span>
+                                <span class="region-count">沙河皮影等 11项</span>
+                            </div>
+                            <div class="region-item" data-region="handan" data-lat="36.6257" data-lng="114.5391">
+                                <div class="region-dot"></div>
+                                <span class="region-name">邯郸</span>
+                                <span class="region-count">成语典故等 13项</span>
+                            </div>
+                            <div class="region-item" data-region="shijiazhuang" data-lat="38.0428" data-lng="114.5149">
+                                <div class="region-dot"></div>
+                                <span class="region-name">石家庄</span>
+                                <span class="region-count">耿村民间故事等 20项</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="map-visual fade-in-right">
+                        <svg class="hebei-map" viewBox="0 0 400 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M100 50 L150 30 L200 40 L250 35 L300 50 L320 100 L310 150 L330 200 L340 250 L320 300 L300 350 L280 400 L250 450 L200 470 L150 460 L100 440 L80 400 L70 350 L60 300 L50 250 L60 200 L70 150 L80 100 L90 70 Z"
+                                  fill="var(--bg-secondary)" stroke="var(--accent)" stroke-width="2"/>
+                            <circle cx="120" cy="80" r="8" fill="var(--accent)" class="map-point" data-city="zhangjiakou"/>
+                            <circle cx="120" cy="80" r="8" class="map-point-pulse"/>
+                            <text x="120" y="65" text-anchor="middle" font-size="12" fill="var(--text-secondary)">张家口</text>
+                            <circle cx="200" cy="100" r="8" fill="var(--accent)" class="map-point" data-city="chengde"/>
+                            <circle cx="200" cy="100" r="8" class="map-point-pulse"/>
+                            <text x="200" y="85" text-anchor="middle" font-size="12" fill="var(--text-secondary)">承德</text>
+                            <circle cx="280" cy="120" r="8" fill="var(--accent)" class="map-point" data-city="qinhuangdao"/>
+                            <circle cx="280" cy="120" r="8" class="map-point-pulse"/>
+                            <text x="280" y="105" text-anchor="middle" font-size="12" fill="var(--text-secondary)">秦皇岛</text>
+                            <circle cx="300" cy="200" r="8" fill="var(--accent)" class="map-point" data-city="tangshan"/>
+                            <circle cx="300" cy="200" r="8" class="map-point-pulse"/>
+                            <text x="300" y="185" text-anchor="middle" font-size="12" fill="var(--text-secondary)">唐山</text>
+                            <circle cx="250" cy="220" r="8" fill="var(--accent)" class="map-point" data-city="langfang"/>
+                            <circle cx="250" cy="220" r="8" class="map-point-pulse"/>
+                            <text x="250" y="205" text-anchor="middle" font-size="12" fill="var(--text-secondary)">廊坊</text>
+                            <circle cx="180" cy="250" r="10" fill="var(--primary)" class="map-point" data-city="shijiazhuang"/>
+                            <circle cx="180" cy="250" r="10" class="map-point-pulse"/>
+                            <text x="180" y="235" text-anchor="middle" font-size="12" fill="var(--text-secondary)" font-weight="bold">石家庄</text>
+                            <circle cx="150" cy="180" r="8" fill="var(--accent)" class="map-point" data-city="baoding"/>
+                            <circle cx="150" cy="180" r="8" class="map-point-pulse"/>
+                            <text x="150" y="165" text-anchor="middle" font-size="12" fill="var(--text-secondary)">保定</text>
+                            <circle cx="280" cy="300" r="8" fill="var(--accent)" class="map-point" data-city="cangzhou"/>
+                            <circle cx="280" cy="300" r="8" class="map-point-pulse"/>
+                            <text x="280" y="285" text-anchor="middle" font-size="12" fill="var(--text-secondary)">沧州</text>
+                            <circle cx="200" cy="320" r="8" fill="var(--accent)" class="map-point" data-city="hengshui"/>
+                            <circle cx="200" cy="320" r="8" class="map-point-pulse"/>
+                            <text x="200" y="305" text-anchor="middle" font-size="12" fill="var(--text-secondary)">衡水</text>
+                            <circle cx="120" cy="350" r="8" fill="var(--accent)" class="map-point" data-city="xingtai"/>
+                            <circle cx="120" cy="350" r="8" class="map-point-pulse"/>
+                            <text x="120" y="335" text-anchor="middle" font-size="12" fill="var(--text-secondary)">邢台</text>
+                            <circle cx="150" cy="420" r="8" fill="var(--accent)" class="map-point" data-city="handan"/>
+                            <circle cx="150" cy="420" r="8" class="map-point-pulse"/>
+                            <text x="150" y="405" text-anchor="middle" font-size="12" fill="var(--text-secondary)">邯郸</text>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========== Timeline Section ========== -->
+        <section class="section" id="timeline">
+            <div class="timeline-section">
+                <div class="section-header fade-in">
+                    <div class="section-tag">History Timeline</div>
+                    <h2 class="section-title">传承历程</h2>
+                    <p class="section-desc">河北非遗文化的历史发展脉络</p>
+                </div>
+                <div class="timeline">
+                    <div class="timeline-item fade-in">
+                        <div class="timeline-content">
+                            <div class="timeline-year">明代</div>
+                            <h4 class="timeline-title">蔚县剪纸起源</h4>
+                            <p class="timeline-desc">蔚县剪纸艺术起源于明代，独特的阴刻技法逐渐形成，成为独树一帜的民间艺术形式。</p>
+                        </div>
+                        <div class="timeline-dot"></div>
+                    </div>
+                    <div class="timeline-item fade-in">
+                        <div class="timeline-content">
+                            <div class="timeline-year">清代</div>
+                            <h4 class="timeline-title">武强年画兴盛</h4>
+                            <p class="timeline-desc">武强年画在清代达到鼎盛，与天津杨柳青、山东潍坊、苏州桃花坞并称中国四大年画。</p>
+                        </div>
+                        <div class="timeline-dot"></div>
+                    </div>
+                    <div class="timeline-item fade-in">
+                        <div class="timeline-content">
+                            <div class="timeline-year">民国时期</div>
+                            <h4 class="timeline-title">吴桥杂技走向世界</h4>
+                            <p class="timeline-desc">吴桥杂技艺人开始走出国门，在世界舞台上展现中国杂技艺术的魅力。</p>
+                        </div>
+                        <div class="timeline-dot"></div>
+                    </div>
+                    <div class="timeline-item fade-in">
+                        <div class="timeline-content">
+                            <div class="timeline-year">2006年</div>
+                            <h4 class="timeline-title">首批国家级非遗</h4>
+                            <p class="timeline-desc">蔚县剪纸、唐山皮影戏、吴桥杂技等入选第一批国家级非物质文化遗产名录。</p>
+                        </div>
+                        <div class="timeline-dot"></div>
+                    </div>
+                    <div class="timeline-item fade-in">
+                        <div class="timeline-content">
+                            <div class="timeline-year">2009年</div>
+                            <h4 class="timeline-title">入选世界级非遗</h4>
+                            <p class="timeline-desc">蔚县剪纸、唐山皮影戏等入选联合国教科文组织"人类非物质文化遗产代表作名录"。</p>
+                        </div>
+                        <div class="timeline-dot"></div>
+                    </div>
+                    <div class="timeline-item fade-in">
+                        <div class="timeline-content">
+                            <div class="timeline-year">2021年</div>
+                            <h4 class="timeline-title">非遗保护新篇章</h4>
+                            <p class="timeline-desc">河北新增多个项目入选国家级非遗名录，非遗保护进入数字化、创新化发展新阶段。</p>
+                        </div>
+                        <div class="timeline-dot"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========== AI Section ========== -->
+        <section class="section" id="ai">
+            <div class="ai-section">
+                <div class="section-header">
+                    <div class="section-tag">AI Assistant</div>
+                    <h2 class="section-title">非遗智能体</h2>
+                    <p class="section-desc">与AI助手对话，深入了解河北非遗文化</p>
+                </div>
+                <div class="ai-container">
+                    <div class="ai-sidebar">
+                        <div class="ai-avatar">&#129302;</div>
+                        <h3 class="ai-name">燕赵小助手</h3>
+                        <p class="ai-role">非遗文化AI向导</p>
+                        <a href="https://www.coze.cn/store/agent/7632599188920385590?bot_id=true&bid=6k39r5ieg1g12" target="_blank" class="coze-link" style="display:block;margin:12px 0;padding:10px 16px;background:var(--accent);color:white;text-align:center;border-radius:8px;text-decoration:none;font-size:0.9rem;transition:all 0.3s ease;">&#129302; 使用Coze智能体</a>
+                        <div class="ai-features">
+                            <div class="ai-feature" onclick="sendQuickMessage('介绍一下蔚县剪纸')">
+                                <div class="ai-feature-icon">&#9986;&#65039;</div>
+                                <span>剪纸艺术</span>
+                            </div>
+                            <div class="ai-feature" onclick="sendQuickMessage('吴桥杂技有什么特色')">
+                                <div class="ai-feature-icon">&#127917;</div>
+                                <span>杂技文化</span>
+                            </div>
+                            <div class="ai-feature" onclick="sendQuickMessage('推荐几个河北非遗景点')">
+                                <div class="ai-feature-icon">&#128205;</div>
+                                <span>景点推荐</span>
+                            </div>
+                            <div class="ai-feature" onclick="sendQuickMessage('河北非遗的历史渊源')">
+                                <div class="ai-feature-icon">&#128218;</div>
+                                <span>历史渊源</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ai-chat">
+                        <div class="chat-header">
+                            <div class="chat-status"></div>
+                            <span>AI助手在线</span>
+                        </div>
+                        <div class="chat-messages" id="chatMessages">
+                            <div class="message ai">您好！我是燕赵遗韵AI助手，专门为您介绍河北非物质文化遗产。您可以问我关于蔚县剪纸、吴桥杂技、武强年画等任何问题，我会为您详细解答。</div>
+                        </div>
+                        <div class="chat-input-area">
+                            <input type="text" class="chat-input" id="chatInput" placeholder="输入您的问题..." onkeypress="handleChatKeypress(event)">
+                            <button class="chat-send" onclick="sendMessage()">&#10148;</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========== Games Section ========== -->
+        <section class="section" id="games">
+            <div class="games-section">
+                <div class="section-header">
+                    <div class="section-tag">Interactive Games</div>
+                    <h2 class="section-title">互动体验</h2>
+                    <p class="section-desc">通过趣味游戏，深入了解河北非遗文化</p>
+                </div>
+                <div class="games-grid">
+                    <div class="game-card" onclick="openGame('quiz')">
+                        <div class="game-icon">&#10067;</div>
+                        <h3 class="game-title">非遗知识问答</h3>
+                        <p class="game-desc">测试您对河北非遗文化的了解程度，挑战高分排行榜</p>
+                        <button class="game-btn">开始挑战</button>
+                    </div>
+                    <div class="game-card" onclick="openGame('match')">
+                        <div class="game-icon">&#127919;</div>
+                        <h3 class="game-title">非遗连连看</h3>
+                        <p class="game-desc">将非遗项目与对应的城市进行匹配，锻炼记忆力</p>
+                        <button class="game-btn">开始游戏</button>
+                    </div>
+                    <div class="game-card" onclick="openGame('puzzle')">
+                        <div class="game-icon">&#129513;</div>
+                        <h3 class="game-title">文化拼图</h3>
+                        <p class="game-desc">完成非遗主题拼图，解锁精美文化图片</p>
+                        <button class="game-btn">开始拼图</button>
+                    </div>
+                    <div class="game-card" onclick="openGame('memory')">
+                        <div class="game-icon">&#127183;</div>
+                        <h3 class="game-title">记忆翻牌</h3>
+                        <p class="game-desc">翻转卡片寻找配对，认识更多非遗项目</p>
+                        <button class="game-btn">开始挑战</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========== Profile Section ========== -->
+        <section class="section" id="profile">
+            <div class="profile-section">
+                <div class="section-header">
+                    <div class="section-tag">Personal Center</div>
+                    <h2 class="section-title">个人中心</h2>
+                    <p class="section-desc">查看您的学习进度和成就</p>
+                </div>
+                <div class="profile-container">
+                    <div class="profile-header">
+                        <div class="profile-avatar">&#128100;</div>
+                        <div class="profile-info">
+                            <h2>文化探索者</h2>
+                            <p>加入燕赵遗韵第 15 天</p>
+                        </div>
+                        <div class="profile-stats">
+                            <div class="profile-stat">
+                                <div class="profile-stat-value">12</div>
+                                <div class="profile-stat-label">已学项目</div>
+                            </div>
+                            <div class="profile-stat">
+                                <div class="profile-stat-value">8</div>
+                                <div class="profile-stat-label">获得徽章</div>
+                            </div>
+                            <div class="profile-stat">
+                                <div class="profile-stat-value">156</div>
+                                <div class="profile-stat-label">学习积分</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="profile-content">
+                        <div class="profile-card">
+                            <h3>&#127942; 我的成就</h3>
+                            <div class="achievement-list">
+                                <div class="achievement-item">
+                                    <div class="achievement-icon">&#127912;</div>
+                                    <div class="achievement-info">
+                                        <h4>剪纸达人</h4>
+                                        <p>深入了解蔚县剪纸艺术</p>
+                                    </div>
+                                </div>
+                                <div class="achievement-item">
+                                    <div class="achievement-icon">&#127917;</div>
+                                    <div class="achievement-info">
+                                        <h4>杂技迷</h4>
+                                        <p>探索吴桥杂技文化</p>
+                                    </div>
+                                </div>
+                                <div class="achievement-item">
+                                    <div class="achievement-icon">&#128444;&#65039;</div>
+                                    <div class="achievement-info">
+                                        <h4>年画收藏家</h4>
+                                        <p>欣赏武强年画作品</p>
+                                    </div>
+                                </div>
+                                <div class="achievement-item locked">
+                                    <div class="achievement-icon">&#128274;</div>
+                                    <div class="achievement-info">
+                                        <h4>非遗大师</h4>
+                                        <p>学习所有非遗项目</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="profile-card">
+                            <h3>&#128214; 学习记录</h3>
+                            <div class="history-list">
+                                <div class="history-item">
+                                    <div class="history-image image-placeholder" style="background:var(--bg-secondary);display:flex;align-items:center;justify-content:center;font-size:0.8rem;color:var(--text-light);">剪纸</div>
+                                    <div class="history-info">
+                                        <h4>蔚县剪纸</h4>
+                                        <p>学习了剪纸的历史与技法</p>
+                                    </div>
+                                    <div class="history-date">2天前</div>
+                                </div>
+                                <div class="history-item">
+                                    <div class="history-image image-placeholder" style="background:var(--bg-secondary);display:flex;align-items:center;justify-content:center;font-size:0.8rem;color:var(--text-light);">杂技</div>
+                                    <div class="history-info">
+                                        <h4>吴桥杂技</h4>
+                                        <p>观看了杂技表演视频</p>
+                                    </div>
+                                    <div class="history-date">5天前</div>
+                                </div>
+                                <div class="history-item">
+                                    <div class="history-image image-placeholder" style="background:var(--bg-secondary);display:flex;align-items:center;justify-content:center;font-size:0.8rem;color:var(--text-light);">年画</div>
+                                    <div class="history-info">
+                                        <h4>武强年画</h4>
+                                        <p>了解了年画的制作工艺</p>
+                                    </div>
+                                    <div class="history-date">1周前</div>
+                                </div>
+                                <div class="history-item">
+                                    <div class="history-image image-placeholder" style="background:var(--bg-secondary);display:flex;align-items:center;justify-content:center;font-size:0.8rem;color:var(--text-light);">内画</div>
+                                    <div class="history-info">
+                                        <h4>衡水内画</h4>
+                                        <p>探索了内画艺术奥秘</p>
+                                    </div>
+                                    <div class="history-date">1周前</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Detail Modal -->
+    <div class="detail-modal" id="detailModal">
+        <div class="detail-modal-content">
+            <button class="detail-modal-close" onclick="closeDetailModal()">&#10005;</button>
+            <div id="detailModalBody">
+                <!-- Filled by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Game Modal -->
+    <div class="game-modal" id="gameModal">
+        <div class="game-modal-content">
+            <button class="game-modal-close" onclick="closeGame()">&#10005;</button>
+            <div id="gameContent"></div>
+        </div>
+    </div>
+
+    <!-- Bottom Nav -->
+    <nav class="bottom-nav">
+        <button class="bottom-nav-item active" data-section="home" onclick="scrollToSection('home')">
+            <div class="bottom-nav-icon">&#127968;</div>
+            <span>首页</span>
+        </button>
+        <button class="bottom-nav-item" data-section="ai" onclick="scrollToSection('ai')">
+            <div class="bottom-nav-icon">&#129302;</div>
+            <span>智能体</span>
+        </button>
+        <button class="bottom-nav-item" data-section="games" onclick="scrollToSection('games')">
+            <div class="bottom-nav-icon">&#127918;</div>
+            <span>互动游戏</span>
+        </button>
+        <button class="bottom-nav-item" data-section="profile" onclick="scrollToSection('profile')">
+            <div class="bottom-nav-icon">&#128100;</div>
+            <span>个人中心</span>
+        </button>
+    </nav>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <!-- City Info Popup -->
+    <div class="city-popup-overlay" id="cityPopupOverlay"></div>
+    <div class="city-popup" id="cityPopup">
+        <div class="city-popup-handle"></div>
+        <button class="city-popup-close" id="cityPopupClose">&#10005;</button>
+        <div class="city-popup-header">
+            <div class="city-popup-icon" id="cityPopupIcon">📍</div>
+            <div>
+                <div class="city-popup-title" id="cityPopupTitle"></div>
+                <div class="city-popup-subtitle" id="cityPopupSubtitle"></div>
+            </div>
+        </div>
+        <div class="city-popup-body">
+            <p class="city-popup-desc" id="cityPopupDesc"></p>
+            <div class="city-popup-tags" id="cityPopupTags"></div>
+            <div class="city-popup-actions">
+                <button class="city-popup-btn city-popup-btn-secondary" id="cityPopupDetail">
+                    <span>📋</span> 查看非遗
+                </button>
+                <button class="city-popup-btn city-popup-btn-primary" id="cityPopupMap">
+                    <span>🗺️</span> 在地图中查看
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    /* ================================================================
+       DATA
+       ================================================================ */
+    const heritageData = [
+        {
+            id: 'yuxian',
+            name: '蔚县剪纸',
+            location: '张家口 · 蔚县',
+            level: '世界级非遗',
+            image: 'images/paper-cutting.jpg',
+            shortDesc: '全国唯一以阴刻为主、阳刻为辅的剪纸艺术，源于明代，色彩艳丽，工艺精湛。',
+            fullDesc: '蔚县剪纸是全国唯一以阴刻为主、阳刻为辅的剪纸艺术，源于明代，色彩艳丽，工艺精湛。2006年入选第一批国家级非遗，2009年入选联合国教科文组织名录。蔚县剪纸以"刻"代"剪"，用薄薄的宣纸为原料，拿小巧锐利的雕刀刻制，再点染明快绚丽的色彩，形成了独特的艺术风格。',
+            history: '蔚县剪纸源于明代，最初是民间窗花装饰。清代中叶发展成熟，形成了独特的"阴刻为主、阳刻为辅"技法。20世纪50年代开始走向世界，多次在国际展览中获奖。2009年入选联合国教科文组织"人类非物质文化遗产代表作名录"。',
+            inheritor: '周淑英',
+            inheritorTitle: '国家级非遗传承人'
+        },
+        {
+            id: 'wuqiao',
+            name: '吴桥杂技',
+            location: '沧州 · 吴桥县',
+            level: '世界级非遗',
+            image: 'images/吴桥杂技.webp',
+            shortDesc: '世界杂技艺术的摇篮，历史悠久，技艺精湛，被誉为"杂技之乡"。',
+            fullDesc: '吴桥杂技是世界杂技艺术的摇篮，历史悠久，技艺精湛，被誉为"杂技之乡"。2006年入选国家级非遗。吴桥杂技门类齐全，节目丰富，包括空中、地面、魔术、马戏等多种形式，吴桥国际杂技艺术节是世界三大杂技赛场之一。',
+            history: '吴桥杂技历史可追溯到春秋战国时期，汉代已成为重要的民间娱乐形式。明清时期达到鼎盛，形成了完整的杂技体系。1987年创办吴桥国际杂技艺术节，至今已举办多届，成为世界知名的杂技盛会。',
+            inheritor: '王保合',
+            inheritorTitle: '国家级非遗传承人'
+        },
+        {
+            id: 'wuqiang',
+            name: '武强年画',
+            location: '衡水 · 武强县',
+            level: '国家级非遗',
+            image: 'images/武强年画.webp',
+            shortDesc: '中国民间木版年画的杰出代表，构图饱满，色彩鲜明。',
+            fullDesc: '武强年画是中国民间木版年画的杰出代表，构图饱满，色彩鲜明，与天津杨柳青、山东潍坊、苏州桃花坞并称中国四大年画。其题材广泛，涵盖神话传说、历史故事、花鸟鱼虫等，具有浓郁的乡土气息和地方特色。',
+            history: '武强年画始于宋元时期，明代初具规模，清代达到鼎盛。鼎盛时期，武强县城南关有画店上百家，年产量达上亿张，远销全国各地。2006年入选第一批国家级非物质文化遗产名录。',
+            inheritor: '马习钦',
+            inheritorTitle: '国家级非遗传承人'
+        },
+        {
+            id: 'hengshui',
+            name: '衡水内画',
+            location: '衡水市',
+            level: '国家级非遗',
+            image: 'images/衡水内画.png',
+            shortDesc: '在鼻烟壶内壁进行绘画的绝技，需反向运笔，被誉为"鬼斧神工"。',
+            fullDesc: '衡水内画是在鼻烟壶内壁进行绘画的绝技，需反向运笔，被誉为"鬼斧神工"的艺术。艺人使用特制的弯勾笔，通过小小的壶口伸入壶内，在磨砂的内壁上反手作画，画面细腻精巧，令人叹为观止。',
+            history: '内画艺术起源于清代，最初在北京出现。衡水内画在继承传统的基础上创新发展，形成了独特的"冀派"风格。衡水内画以壶代纸，以笔代刀，在方寸之间展现大千世界，2006年入选国家级非物质文化遗产名录。',
+            inheritor: '王习三',
+            inheritorTitle: '国家级非遗传承人'
+        },
+        {
+            id: 'tangshan',
+            name: '唐山皮影戏',
+            location: '唐山市',
+            level: '世界级非遗',
+            image: 'images/puppet-show.webp',
+            shortDesc: '中国皮影戏的重要流派，入选联合国教科文组织人类非物质文化遗产代表作名录。',
+            fullDesc: '唐山皮影戏是中国皮影戏的重要流派，入选联合国教科文组织人类非物质文化遗产代表作名录。唐山皮影戏以驴皮雕刻影人，造型精美，唱腔独特，融合了冀东地区的民间音乐和方言，具有浓郁的地方特色。',
+            history: '唐山皮影戏起源于明代，清代中叶形成独特风格。其唱腔以"滦州影调"为基础，融合了京剧、评剧等元素。2011年，中国皮影戏入选联合国教科文组织"人类非物质文化遗产代表作名录"，唐山皮影戏是重要组成部分。',
+            inheritor: '齐永衡',
+            inheritorTitle: '国家级非遗传承人'
+        },
+        {
+            id: 'quyang',
+            name: '曲阳石雕',
+            location: '保定 · 曲阳县',
+            level: '国家级非遗',
+            image: 'images/曲阳石雕.jpg',
+            shortDesc: '中国石雕艺术的发祥地之一，技艺传承两千余年，作品遍布世界各地。',
+            fullDesc: '曲阳石雕是中国石雕艺术的发祥地之一，技艺传承两千余年，作品遍布世界各地。曲阳石雕以汉白玉为主要材料，采用圆雕、浮雕、透雕等多种技法，作品造型优美，工艺精湛，被誉为"中国雕刻之乡"。',
+            history: '曲阳石雕始于汉代，兴于唐代，盛于明清。曲阳自古盛产大理石，得天独厚的石料资源孕育了精湛的石雕技艺。从人民英雄纪念碑到天安门前的金水桥，都有曲阳石雕艺人的心血。2006年入选国家级非物质文化遗产名录。',
+            inheritor: '甄彦苍',
+            inheritorTitle: '国家级非遗传承人'
+        }
+    ];
+
+    /* ================================================================
+       INITIALIZATION
+       ================================================================ */
+    window.addEventListener('load', () => {
+        setTimeout(() => {
+            document.getElementById('loader').classList.add('hidden');
+            animateCounters();
+            startTypewriter();
+        }, 1500);
+    });
+
+    /* ================================================================
+       (a) STARFIELD PARTICLE BACKGROUND
+       ================================================================ */
+    (function initStarfield() {
+        const canvas = document.getElementById('heroCanvas');
+        const ctx = canvas.getContext('2d');
+        let stars = [];
+        let shootingStars = [];
+        let mouseX = -1000, mouseY = -1000;
+        const STAR_COUNT = 120;
+        const CONNECTION_DIST = 100;
+        const MOUSE_RADIUS = 180;
+
+        function resize() {
+            const hero = document.getElementById('heroSection');
+            if (!hero) return;
+            canvas.width = hero.offsetWidth;
+            canvas.height = hero.offsetHeight;
+        }
+        resize();
+        window.addEventListener('resize', resize);
+
+        class Star {
+            constructor() {
+                this.reset();
+            }
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.vx = (Math.random() - 0.5) * 0.3;
+                this.vy = (Math.random() - 0.5) * 0.3;
+                this.baseRadius = Math.random() * 1.8 + 0.4;
+                this.radius = this.baseRadius;
+                this.baseOpacity = Math.random() * 0.6 + 0.2;
+                this.opacity = this.baseOpacity;
+                this.twinkleSpeed = Math.random() * 0.02 + 0.005;
+                this.twinkleOffset = Math.random() * Math.PI * 2;
+                // Warm gold tones
+                const hue = 35 + Math.random() * 20;
+                const sat = 40 + Math.random() * 30;
+                const light = 60 + Math.random() * 25;
+                this.color = `hsl(${hue}, ${sat}%, ${light}%)`;
+            }
+            update(time) {
+                // Twinkle
+                this.opacity = this.baseOpacity + Math.sin(time * this.twinkleSpeed + this.twinkleOffset) * 0.25;
+                this.radius = this.baseRadius + Math.sin(time * this.twinkleSpeed * 0.7 + this.twinkleOffset) * 0.4;
+                this.opacity = Math.max(0.05, Math.min(1, this.opacity));
+                this.radius = Math.max(0.2, this.radius);
+
+                // Mouse attraction
+                const dx = mouseX - this.x;
+                const dy = mouseY - this.y;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+                if (dist < MOUSE_RADIUS && dist > 0) {
+                    const force = (MOUSE_RADIUS - dist) / MOUSE_RADIUS * 0.015;
+                    this.vx += dx / dist * force;
+                    this.vy += dy / dist * force;
+                }
+                this.vx *= 0.995;
+                this.vy *= 0.995;
+                this.x += this.vx;
+                this.y += this.vy;
+                if (this.x < -10) this.x = canvas.width + 10;
+                if (this.x > canvas.width + 10) this.x = -10;
+                if (this.y < -10) this.y = canvas.height + 10;
+                if (this.y > canvas.height + 10) this.y = -10;
+            }
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = this.opacity;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+                // Glow for larger stars
+                if (this.baseRadius > 1.2) {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.radius * 2.5, 0, Math.PI * 2);
+                    const grad = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.radius * 2.5);
+                    grad.addColorStop(0, `rgba(201, 168, 108, ${this.opacity * 0.3})`);
+                    grad.addColorStop(1, 'rgba(201, 168, 108, 0)');
+                    ctx.fillStyle = grad;
+                    ctx.fill();
+                }
+                ctx.restore();
+            }
+        }
+
+        class ShootingStar {
+            constructor() {
+                this.reset();
+            }
+            reset() {
+                this.x = Math.random() * canvas.width * 1.5;
+                this.y = -10;
+                this.length = 60 + Math.random() * 80;
+                this.speed = 4 + Math.random() * 4;
+                this.angle = Math.PI / 4 + (Math.random() - 0.5) * 0.3;
+                this.opacity = 0.8 + Math.random() * 0.2;
+                this.life = 1;
+                this.decay = 0.008 + Math.random() * 0.008;
+                this.active = false;
+            }
+            update() {
+                if (!this.active) return;
+                this.x += Math.cos(this.angle) * this.speed;
+                this.y += Math.sin(this.angle) * this.speed;
+                this.life -= this.decay;
+                if (this.life <= 0 || this.y > canvas.height + 20) {
+                    this.active = false;
+                }
+            }
+            draw() {
+                if (!this.active) return;
+                const tailX = this.x - Math.cos(this.angle) * this.length * this.life;
+                const tailY = this.y - Math.sin(this.angle) * this.length * this.life;
+                const grad = ctx.createLinearGradient(this.x, this.y, tailX, tailY);
+                grad.addColorStop(0, `rgba(255, 240, 210, ${this.opacity * this.life})`);
+                grad.addColorStop(1, 'rgba(255, 240, 210, 0)');
+                ctx.beginPath();
+                ctx.moveTo(this.x, this.y);
+                ctx.lineTo(tailX, tailY);
+                ctx.strokeStyle = grad;
+                ctx.lineWidth = 1.5;
+                ctx.stroke();
+            }
+        }
+
+        for (let i = 0; i < STAR_COUNT; i++) {
+            stars.push(new Star());
+        }
+        for (let i = 0; i < 3; i++) {
+            const s = new ShootingStar();
+            shootingStars.push(s);
+        }
+
+        let lastShootingTime = 0;
+
+        function animate(time) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw connections (subtle)
+            for (let i = 0; i < stars.length; i++) {
+                for (let j = i + 1; j < stars.length; j++) {
+                    const dx = stars[i].x - stars[j].x;
+                    const dy = stars[i].y - stars[j].y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < CONNECTION_DIST) {
+                        const alpha = (1 - dist / CONNECTION_DIST) * 0.08;
+                        ctx.beginPath();
+                        ctx.moveTo(stars[i].x, stars[i].y);
+                        ctx.lineTo(stars[j].x, stars[j].y);
+                        ctx.strokeStyle = `rgba(201, 168, 108, ${alpha})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.stroke();
+                    }
+                }
+            }
+
+            stars.forEach(s => {
+                s.update(time);
+                s.draw();
+            });
+
+            // Shooting stars
+            if (time - lastShootingTime > 3000 + Math.random() * 5000) {
+                const inactive = shootingStars.find(s => !s.active);
+                if (inactive) {
+                    inactive.reset();
+                    inactive.active = true;
+                    lastShootingTime = time;
+                }
+            }
+            shootingStars.forEach(s => {
+                s.update();
+                s.draw();
+            });
+
+            requestAnimationFrame(animate);
+        }
+        animate(0);
+
+        document.getElementById('heroSection').addEventListener('mousemove', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            mouseX = e.clientX - rect.left;
+            mouseY = e.clientY - rect.top;
+        });
+        document.getElementById('heroSection').addEventListener('mouseleave', () => {
+            mouseX = -1000;
+            mouseY = -1000;
+        });
+    })();
+
+    /* ================================================================
+       (b) 3D FLIP CARDS + (i) MOUSE GLOW
+       ================================================================ */
+    function renderHeritageCards() {
+        const grid = document.getElementById('heritageGrid');
+        grid.innerHTML = '';
+        heritageData.forEach((item, idx) => {
+            const card = document.createElement('div');
+            card.className = 'flip-card fade-in';
+            card.style.transitionDelay = (idx * 0.1) + 's';
+            card.innerHTML = `
+                <div class="card-glow"></div>
+                <div class="flip-card-inner">
+                    <div class="flip-card-front">
+                        <div class="card-image-wrap">
+                            <img data-src="${item.image}" alt="${item.name}" class="lazy-img" onerror="this.style.display='none';this.parentElement.innerHTML='<div style=\\'width:100%;height:280px;background:var(--bg-secondary);display:flex;align-items:center;justify-content:center;color:var(--text-light);\\'>${item.name}</div>'">
+                        </div>
+                        <div class="card-content">
+                            <div class="card-location">${item.location}</div>
+                            <h3 class="card-title">${item.name}</h3>
+                            <p class="card-desc">${item.shortDesc}</p>
+                            <div class="card-meta">
+                                <span class="card-level">${item.level}</span>
+                                <div class="card-arrow">&#8594;</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flip-card-back">
+                        <div class="back-title">${item.name}</div>
+                        <div class="back-history">${item.fullDesc}</div>
+                        <button class="back-detail-btn" onclick="event.stopPropagation(); openDetailModal('${item.id}')">查看详情 &#8594;</button>
+                    </div>
+                </div>
+            `;
+            // Mouse glow effect
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const glow = card.querySelector('.card-glow');
+                glow.style.left = (e.clientX - rect.left) + 'px';
+                glow.style.top = (e.clientY - rect.top) + 'px';
+            });
+            grid.appendChild(card);
+        });
+        // Init lazy load for new images
+        initLazyLoad();
+    }
+    // renderHeritageCards() called after scrollObserver is initialized
+
+    /* ================================================================
+       (c) DETAIL MODAL
+       ================================================================ */
+    function openDetailModal(id) {
+        const item = heritageData.find(d => d.id === id);
+        if (!item) return;
+        const modal = document.getElementById('detailModal');
+        const body = document.getElementById('detailModalBody');
+        body.innerHTML = `
+            <img src="${item.image}" alt="${item.name}" class="detail-modal-image" onerror="this.style.display='none'">
+            <div class="detail-modal-body">
+                <div class="detail-location">${item.location}</div>
+                <h2 class="detail-title">${item.name}</h2>
+                <span class="detail-level-badge">${item.level}</span>
+                <p class="detail-desc">${item.fullDesc}</p>
+                <h3 class="detail-section-title">历史渊源</h3>
+                <div class="detail-history">${item.history}</div>
+                <h3 class="detail-section-title">传承人</h3>
+                <div class="detail-inheritor">
+                    <div class="detail-inheritor-avatar">&#128100;</div>
+                    <div class="detail-inheritor-info">
+                        <h4>${item.inheritor}</h4>
+                        <p>${item.inheritorTitle} - ${item.name}代表性传承人</p>
+                    </div>
+                </div>
+            </div>
+        `;
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+    function closeDetailModal() {
+        document.getElementById('detailModal').classList.remove('active');
+        document.body.style.overflow = '';
+    }
+    document.getElementById('detailModal').addEventListener('click', (e) => {
+        if (e.target === e.currentTarget) closeDetailModal();
+    });
+
+    /* ================================================================
+       (d) PARALLAX SCROLL + SECTION ANIMATIONS
+       ================================================================ */
+    window.addEventListener('scroll', () => {
+        // Navbar scroll effect
+        const navbar = document.getElementById('navbar');
+        if (window.scrollY > 50) {
+            navbar.classList.add('scrolled');
+        } else {
+            navbar.classList.remove('scrolled');
+        }
+        // FAB visibility
+        const fab = document.getElementById('fab');
+        if (window.scrollY > 500) {
+            fab.style.opacity = '1';
+            fab.style.visibility = 'visible';
+        } else {
+            fab.style.opacity = '0';
+            fab.style.visibility = 'hidden';
+        }
+        // Parallax on hero content
+        const heroContent = document.getElementById('heroContent');
+        if (heroContent) {
+            const scrolled = window.scrollY;
+            heroContent.style.transform = `translateY(${scrolled * 0.3}px)`;
+            heroContent.style.opacity = Math.max(0, 1 - scrolled / 600);
+        }
+    });
+
+    /* ================================================================
+       (e) READING PROGRESS BAR
+       ================================================================ */
+    window.addEventListener('scroll', () => {
+        const scrollTop = window.scrollY;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+        document.getElementById('progressBar').style.width = progress + '%';
+    });
+
+    /* ================================================================
+       (f) DARK / LIGHT THEME TOGGLE
+       ================================================================ */
+    const themeToggle = document.getElementById('themeToggle');
+    let isDark = false;
+    themeToggle.addEventListener('click', () => {
+        isDark = !isDark;
+        document.documentElement.setAttribute('data-theme', isDark ? 'dark' : '');
+        themeToggle.innerHTML = isDark ? '&#9788;' : '&#9790;';
+        themeToggle.title = isDark ? '切换亮色' : '切换暗色';
+    });
+
+    /* ================================================================
+       (g) LAZY LOAD IMAGES (IntersectionObserver)
+       ================================================================ */
+    function initLazyLoad() {
+        const lazyImages = document.querySelectorAll('.lazy-img:not(.loaded)');
+        const imgObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const img = entry.target;
+                    const src = img.getAttribute('data-src');
+                    if (src) {
+                        img.src = src;
+                        img.onload = () => img.classList.add('loaded');
+                        img.onerror = () => img.classList.add('loaded');
+                    }
+                    imgObserver.unobserve(img);
+                }
+            });
+        }, { rootMargin: '200px' });
+        lazyImages.forEach(img => imgObserver.observe(img));
+    }
+    initLazyLoad();
+
+    /* ================================================================
+       (h) TYPEWRITER EFFECT
+       ================================================================ */
+    function startTypewriter() {
+        const el = document.getElementById('heroDesc');
+        const text = '探索河北非物质文化遗产的瑰宝，感受千年文化的魅力。从蔚县剪纸到吴桥杂技，从武强年画到衡水内画，每一项技艺都承载着深厚的历史底蕴。';
+        let i = 0;
+        el.innerHTML = '<span class="typewriter-cursor"></span>';
+        function type() {
+            if (i < text.length) {
+                el.innerHTML = text.substring(0, i + 1) + '<span class="typewriter-cursor"></span>';
+                i++;
+                setTimeout(type, 50 + Math.random() * 40);
+            } else {
+                // Keep cursor blinking for a while then remove
+                setTimeout(() => {
+                    el.innerHTML = text;
+                }, 3000);
+            }
+        }
+        setTimeout(type, 1200);
+    }
+
+    /* ================================================================
+       (j) NUMBER COUNTER ANIMATION
+       ================================================================ */
+    function animateCounters() {
+        const counters = document.querySelectorAll('.stat-number[data-count]');
+        counters.forEach(counter => {
+            const target = parseInt(counter.getAttribute('data-count'));
+            const duration = 2000;
+            const step = target / (duration / 16);
+            let current = 0;
+            const timer = setInterval(() => {
+                current += step;
+                if (current >= target) {
+                    counter.textContent = target;
+                    clearInterval(timer);
+                } else {
+                    counter.textContent = Math.floor(current);
+                }
+            }, 16);
+        });
+    }
+
+    /* ================================================================
+       SCROLL OBSERVER (fade-in, fade-in-left, fade-in-right)
+       ================================================================ */
+    const scrollObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.fade-in, .fade-in-left, .fade-in-right').forEach(el => {
+        scrollObserver.observe(el);
+    });
+
+    // Render heritage cards (needs scrollObserver)
+    renderHeritageCards();
+    // Re-observe new fade-in elements from cards
+    document.querySelectorAll('.heritage-grid .fade-in').forEach(el => scrollObserver.observe(el));
+
+    /* ================================================================
+       SECTION NAVIGATION - 平滑滚动
+       ================================================================ */
+    function scrollToSection(sectionId) {
+        const target = document.getElementById(sectionId);
+        if (target) {
+            const offset = document.getElementById('navbar').offsetHeight + 10;
+            const top = target.getBoundingClientRect().top + window.pageYOffset - offset;
+            window.scrollTo({ top, behavior: 'smooth' });
+        }
+        // Update nav active state
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('data-section') === sectionId) link.classList.add('active');
+        });
+        document.querySelectorAll('.bottom-nav-item').forEach(item => {
+            item.classList.remove('active');
+            if (item.getAttribute('data-section') === sectionId) item.classList.add('active');
+        });
+    }
+    document.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            scrollToSection(link.getAttribute('data-section'));
+        });
+    });
+
+    // 滚动时自动高亮当前 section 的导航
+    function updateActiveNav() {
+        const sections = document.querySelectorAll('.section[id]');
+        const scrollPos = window.scrollY + document.getElementById('navbar').offsetHeight + 50;
+        let currentId = 'home';
+        sections.forEach(section => {
+            if (section.offsetTop <= scrollPos) {
+                currentId = section.id;
+            }
+        });
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.classList.toggle('active', link.getAttribute('data-section') === currentId);
+        });
+        document.querySelectorAll('.bottom-nav-item').forEach(item => {
+            item.classList.toggle('active', item.getAttribute('data-section') === currentId);
+        });
+    }
+    window.addEventListener('scroll', updateActiveNav);
+
+    // Handle initial hash on page load
+    function handleHash() {
+        const hash = window.location.hash.slice(1);
+        if (hash && document.getElementById(hash)) {
+            setTimeout(() => scrollToSection(hash), 300);
+        }
+    }
+    window.addEventListener('hashchange', handleHash);
+    if (window.location.hash) {
+        handleHash();
+    }
+
+    /* ================================================================
+       MAP INTERACTION
+       ================================================================ */
+    const cityData = {
+        zhangjiakou: {
+            name: '张家口', fullName: '河北省张家口市',
+            icon: '🏔️',
+            desc: '张家口位于河北西北部，是冬奥之城。蔚县剪纸以"刻"代"剪"，色彩艳丽，2009年入选联合国教科文组织人类非遗名录。暖泉打树花更是震撼人心的民间绝技。',
+            tags: ['蔚县剪纸', '暖泉打树花', '二人台', '口梆子'],
+            heritage: 'yuxian'
+        },
+        chengde: {
+            name: '承德', fullName: '河北省承德市',
+            icon: '🏯',
+            desc: '承德是首批国家历史文化名城，避暑山庄及周围寺庙是世界文化遗产。满族文化底蕴深厚，民间剪纸、刺绣等传统工艺代代相传。',
+            tags: ['满族刺绣', '承德剪纸', '丰宁剪纸', '二贵摔跤'],
+            heritage: null
+        },
+        qinhuangdao: {
+            name: '秦皇岛', fullName: '河北省秦皇岛市',
+            icon: '🌊',
+            desc: '秦皇岛依山傍海，孟姜女传说发源于此，是中国四大民间爱情传说之一。昌黎地秧歌、抚宁鼓吹乐等非遗项目丰富多彩。',
+            tags: ['孟姜女传说', '昌黎地秧歌', '抚宁鼓吹乐', '皮影戏'],
+            heritage: null
+        },
+        tangshan: {
+            name: '唐山', fullName: '河北省唐山市',
+            icon: '🎭',
+            desc: '唐山皮影戏是中国皮影戏的重要流派，以驴皮雕刻影人，造型精美，唱腔独特。2011年入选联合国教科文组织人类非遗代表作名录。',
+            tags: ['唐山皮影戏', '乐亭大鼓', '评剧', '唐山花吹'],
+            heritage: 'tangshan'
+        },
+        langfang: {
+            name: '廊坊', fullName: '河北省廊坊市',
+            icon: '🎵',
+            desc: '廊坊地处京津走廊，京东大鼓是国家级非遗，唱腔悠扬。固安柳编、霸州胜芳花灯等传统手工艺独具地方特色。',
+            tags: ['京东大鼓', '固安柳编', '胜芳花灯', '景泰蓝'],
+            heritage: null
+        },
+        baoding: {
+            name: '保定', fullName: '河北省保定市',
+            icon: '🗿',
+            desc: '保定是文化大市，曲阳石雕始于汉代，以汉白玉为主要材料，作品遍布世界各地。从人民英雄纪念碑到天安门金水桥，都有曲阳艺人的心血。',
+            tags: ['曲阳石雕', '定瓷', '保定老调', '徐水舞狮'],
+            heritage: 'quyang'
+        },
+        cangzhou: {
+            name: '沧州', fullName: '河北省沧州市',
+            icon: '🎪',
+            desc: '吴桥是享誉世界的"杂技之乡"，吴桥杂技历史悠久，门类齐全。吴桥国际杂技艺术节是世界三大杂技赛场之一。',
+            tags: ['吴桥杂技', '沧州木板大鼓', '河间歌诗', '武术'],
+            heritage: 'wuqiao'
+        },
+        hengshui: {
+            name: '衡水', fullName: '河北省衡水市',
+            icon: '🎨',
+            desc: '衡水内画是在鼻烟壶内壁反向作画的绝技，被誉为"鬼斧神工"。艺人使用特制弯勾笔，在方寸之间展现大千世界。',
+            tags: ['衡水内画', '武强年画', '衡水老白干', '深州形意拳'],
+            heritage: 'hengshui'
+        },
+        xingtai: {
+            name: '邢台', fullName: '河北省邢台市',
+            icon: '📜',
+            desc: '邢台历史悠久，是殷商故都。沙河皮影、邢白瓷等非遗项目承载着深厚的历史文化底蕴，梅花拳在此广泛传承。',
+            tags: ['沙河皮影', '邢白瓷', '梅花拳', '邢台秧歌'],
+            heritage: null
+        },
+        handan: {
+            name: '邯郸', fullName: '河北省邯郸市',
+            icon: '📖',
+            desc: '邯郸是中国成语典故之都，三千年的历史留下了1500多条成语典故。磁州窑是中国古代最大的民窑体系，邯郸剪纸独具冀南风格。',
+            tags: ['成语典故', '磁州窑', '邯郸剪纸', '永年太极'],
+            heritage: null
+        },
+        shijiazhuang: {
+            name: '石家庄', fullName: '河北省石家庄市',
+            icon: '🏛️',
+            desc: '石家庄是河北省会，耿村民间故事是中国民间文学的代表。正定古城底蕴深厚，常山战鼓气势磅礴，藁城宫灯闻名遐迩。',
+            tags: ['耿村民间故事', '正定古城', '常山战鼓', '藁城宫灯'],
+            heritage: null
+        }
+    };
+
+    let currentCity = null;
+
+    function openCityPopup(cityId) {
+        const data = cityData[cityId];
+        if (!data) return;
+        currentCity = cityId;
+
+        // Update popup content
+        document.getElementById('cityPopupIcon').textContent = data.icon;
+        document.getElementById('cityPopupTitle').textContent = data.name;
+        document.getElementById('cityPopupSubtitle').textContent = data.fullName;
+        document.getElementById('cityPopupDesc').textContent = data.desc;
+
+        // Render tags
+        const tagsEl = document.getElementById('cityPopupTags');
+        tagsEl.innerHTML = data.tags.map(tag => `<span class="city-popup-tag">${tag}</span>`).join('');
+
+        // Show popup
+        document.getElementById('cityPopupOverlay').classList.add('show');
+        document.getElementById('cityPopup').classList.add('show');
+
+        // Highlight region item
+        document.querySelectorAll('.region-item').forEach(i => i.classList.remove('active'));
+        const regionItem = document.querySelector(`.region-item[data-region="${cityId}"]`);
+        if (regionItem) regionItem.classList.add('active');
+    }
+
+    function closeCityPopup() {
+        document.getElementById('cityPopupOverlay').classList.remove('show');
+        document.getElementById('cityPopup').classList.remove('show');
+        currentCity = null;
+    }
+
+    // Close popup on overlay click
+    document.getElementById('cityPopupOverlay').addEventListener('click', closeCityPopup);
+    document.getElementById('cityPopupClose').addEventListener('click', closeCityPopup);
+
+    // "查看非遗" button
+    document.getElementById('cityPopupDetail').addEventListener('click', () => {
+        if (currentCity && cityData[currentCity].heritage) {
+            closeCityPopup();
+            scrollToSection('heritage');
+            setTimeout(() => {
+                openDetailModal(cityData[currentCity].heritage);
+            }, 400);
+        } else {
+            showToast('更多非遗项目持续收录中...');
+        }
+    });
+
+    // "在地图中查看" button - open Amap (高德地图)
+    document.getElementById('cityPopupMap').addEventListener('click', () => {
+        if (!currentCity) return;
+        const regionItem = document.querySelector(`.region-item[data-region="${currentCity}"]`);
+        const lat = regionItem ? regionItem.getAttribute('data-lat') : '';
+        const lng = regionItem ? regionItem.getAttribute('data-lng') : '';
+        const name = cityData[currentCity].name;
+        // Open Amap with marker
+        const url = `https://uri.amap.com/marker?position=${lng},${lat}&name=${encodeURIComponent(name + '非遗')}&src=mypage&coordinate=gaode&callnative=0`;
+        window.open(url, '_blank');
+        closeCityPopup();
+    });
+
+    // Region item click
+    document.querySelectorAll('.region-item').forEach(item => {
+        item.addEventListener('click', () => {
+            const region = item.getAttribute('data-region');
+            openCityPopup(region);
+        });
+    });
+
+    // SVG map point click
+    document.querySelectorAll('.map-point').forEach(point => {
+        point.addEventListener('click', () => {
+            const city = point.getAttribute('data-city');
+            openCityPopup(city);
+        });
+    });
+
+    /* ================================================================
+       AI CHAT - 模拟对话
+       ================================================================ */
+    function sendMessage() {
+        const input = document.getElementById('chatInput');
+        const message = input.value.trim();
+        if (!message) return;
+        addMessage(message, 'user');
+        input.value = '';
+        setTimeout(() => {
+            const response = generateAIResponse(message);
+            addMessage(response, 'ai');
+        }, 800);
+    }
+
+    function sendQuickMessage(msg) {
+        document.getElementById('chatInput').value = msg;
+        sendMessage();
+    }
+
+    function handleChatKeypress(e) {
+        if (e.key === 'Enter') sendMessage();
+    }
+
+    function addMessage(text, type) {
+        const container = document.getElementById('chatMessages');
+        const div = document.createElement('div');
+        div.className = 'message ' + type;
+        div.textContent = text;
+        container.appendChild(div);
+        container.scrollTop = container.scrollHeight;
+    }
+
+    function generateAIResponse(message) {
+        const responses = {
+            '蔚县剪纸': '蔚县剪纸是河北省张家口市蔚县的传统民间艺术，以"阴刻为主，阳刻为辅"的独特技法著称，色彩浓艳，构图饱满，被誉为"中华民间艺术一绝"。2006年入选国家级非物质文化遗产名录。',
+            '吴桥杂技': '吴桥杂技是河北省沧州市吴桥县的传统民俗杂技艺术，历史悠久，技艺精湛，被誉为"杂技之乡"。2006年入选国家级非遗，吴桥国际杂技艺术节是世界三大杂技赛场之一。',
+            '武强年画': '武强年画是河北省衡水市武强县的传统民间工艺品，中国民间木版年画的杰出代表，构图饱满，色彩鲜明，与天津杨柳青、山东潍坊、苏州桃花坞并称中国四大年画。',
+            '衡水内画': '衡水内画是河北省衡水市的传统美术，在鼻烟壶等小型器皿内壁上作画，以精妙细腻的笔法著称，被誉为"鬼斧神工"的艺术。2006年入选国家级非物质文化遗产名录。',
+            '唐山皮影': '唐山皮影戏是中国皮影戏的重要流派，以精美的雕刻工艺和独特的唱腔著称，2006年入选国家级非物质文化遗产名录，是中国皮影戏的杰出代表。',
+            '曲阳石雕': '曲阳石雕是河北省保定市曲阳县的传统美术，始于汉代，兴于唐代，以汉白玉雕刻著称，2006年入选国家级非物质文化遗产名录。'
+        };
+        for (let key in responses) {
+            if (message.includes(key)) return responses[key];
+        }
+        return '感谢您的提问！我是燕赵遗韵AI助手，专注于河北非物质文化遗产文化。您可以向我询问关于蔚县剪纸、吴桥杂技、武强年画、衡水内画、唐山皮影、曲阳石雕等方面的知识，我会尽力为您解答。';
+    }
+
+    // Coze智能体配置（预留，待网络环境支持后接入）
+    (function() {
+        console.log('Coze智能体配置已准备');
+        console.log('Bot ID: 7632599188920385590');
+        console.log('PAT: pat_QeUt8CKqel3TEg45JWQTQXAC6SCzenXL2QJWTF0uETgDogaX5guUUrzHX3M7X8je');
+    })();
+
+    /* ================================================================
+       GAMES
+       ================================================================ */
+    let currentGame = null;
+    let quizScore = 0;
+    let currentQuestion = 0;
+
+    const quizQuestions = [
+        { question: '蔚县剪纸最独特的技法是什么？', options: ['阳刻为主', '阴刻为主', '镂空技法', '染色技法'], correct: 1 },
+        { question: '被誉为"杂技之乡"的是哪个地方？', options: ['石家庄', '保定', '沧州吴桥', '衡水'], correct: 2 },
+        { question: '武强年画与以下哪个不是中国四大年画？', options: ['天津杨柳青', '山东潍坊', '四川绵竹', '河南开封'], correct: 3 },
+        { question: '衡水内画是在什么器皿内壁作画？', options: ['茶杯', '鼻烟壶', '花瓶', '扇子'], correct: 1 },
+        { question: '唐山皮影戏入选了哪个国际组织的名录？', options: ['世界文化遗产', '世界自然遗产', '人类非物质文化遗产', '世界记忆遗产'], correct: 2 }
+    ];
+
+    function openGame(type) {
+        document.getElementById('gameModal').classList.add('active');
+        currentGame = type;
+        switch(type) {
+            case 'quiz': startQuiz(); break;
+            case 'match': startMatchGame(); break;
+            case 'puzzle': startPuzzleGame(); break;
+            case 'memory': startMemoryGame(); break;
+        }
+    }
+    function closeGame() {
+        document.getElementById('gameModal').classList.remove('active');
+        currentGame = null;
+    }
+    function startQuiz() {
+        quizScore = 0;
+        currentQuestion = 0;
+        showQuizQuestion();
+    }
+    function showQuizQuestion() {
+        const content = document.getElementById('gameContent');
+        if (currentQuestion >= quizQuestions.length) {
+            const msg = quizScore === quizQuestions.length ? '太棒了！全部答对！' : quizScore >= 3 ? '不错哦！继续加油！' : '还需要多多学习呢！';
+            content.innerHTML = '<div class="quiz-container"><h2 style="font-family:\'Noto Serif SC\',serif;margin-bottom:20px;">答题完成！</h2><div class="quiz-score">' + quizScore + '/' + quizQuestions.length + '</div><p style="color:var(--text-secondary);margin-bottom:28px;">' + msg + '</p><button class="game-btn" onclick="startQuiz()">再玩一次</button></div>';
+            return;
+        }
+        const q = quizQuestions[currentQuestion];
+        let dotsHtml = '';
+        for (let i = 0; i < quizQuestions.length; i++) {
+            let cls = '';
+            if (i === currentQuestion) cls = 'active';
+            else if (i < currentQuestion) cls = 'correct';
+            dotsHtml += '<div class="quiz-dot ' + cls + '"></div>';
+        }
+        let optsHtml = '';
+        q.options.forEach((opt, i) => {
+            optsHtml += '<div class="quiz-option" onclick="selectQuizOption(' + i + ')"><div class="quiz-option-letter">' + String.fromCharCode(65 + i) + '</div><span>' + opt + '</span></div>';
+        });
+        content.innerHTML = '<div class="quiz-container"><div class="quiz-progress">' + dotsHtml + '</div><div class="quiz-question">' + q.question + '</div><div class="quiz-options">' + optsHtml + '</div></div>';
+    }
+    function selectQuizOption(idx) {
+        const q = quizQuestions[currentQuestion];
+        const opts = document.querySelectorAll('.quiz-option');
+        opts.forEach((opt, i) => {
+            if (i === q.correct) opt.classList.add('correct');
+            else if (i === idx && i !== q.correct) opt.classList.add('wrong');
+            opt.style.pointerEvents = 'none';
+        });
+        if (idx === q.correct) quizScore++;
+        setTimeout(() => { currentQuestion++; showQuizQuestion(); }, 1200);
+    }
+    function startMatchGame() {
+        const content = document.getElementById('gameContent');
+        content.innerHTML = '<div style="text-align:center;"><h2 style="font-family:\'Noto Serif SC\',serif;margin-bottom:20px;">非遗连连看</h2><p style="color:var(--text-secondary);margin-bottom:28px;">将非遗项目与对应的城市匹配</p><div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:28px;"><div style="padding:18px;background:var(--bg-secondary);border-radius:12px;cursor:pointer;" onclick="showToast(\'请选择右侧对应城市\')">蔚县剪纸</div><div style="padding:18px;background:var(--bg-secondary);border-radius:12px;cursor:pointer;" onclick="showToast(\'正确！+10分\')">张家口</div><div style="padding:18px;background:var(--bg-secondary);border-radius:12px;cursor:pointer;" onclick="showToast(\'请选择右侧对应城市\')">吴桥杂技</div><div style="padding:18px;background:var(--bg-secondary);border-radius:12px;cursor:pointer;" onclick="showToast(\'正确！+10分\')">沧州</div><div style="padding:18px;background:var(--bg-secondary);border-radius:12px;cursor:pointer;" onclick="showToast(\'请选择右侧对应城市\')">武强年画</div><div style="padding:18px;background:var(--bg-secondary);border-radius:12px;cursor:pointer;" onclick="showToast(\'正确！+10分\')">衡水</div></div><button class="game-btn" onclick="closeGame()">完成</button></div>';
+    }
+    function startPuzzleGame() {
+        const content = document.getElementById('gameContent');
+        content.innerHTML = '<div style="text-align:center;"><h2 style="font-family:\'Noto Serif SC\',serif;margin-bottom:20px;">文化拼图</h2><p style="color:var(--text-secondary);margin-bottom:28px;">拖动拼图块完成非遗图案</p><div style="width:280px;height:280px;margin:0 auto 28px;background:var(--bg-secondary);border-radius:12px;display:flex;align-items:center;justify-content:center;"><span style="color:var(--text-light);">拼图区域</span></div><button class="game-btn" onclick="showToast(\'恭喜完成拼图！\');closeGame()">完成拼图</button></div>';
+    }
+    function startMemoryGame() {
+        const content = document.getElementById('gameContent');
+        const cards = ['&#9986;&#65039;', '&#9986;&#65039;', '&#127917;', '&#127917;', '&#128444;&#65039;', '&#128444;&#65039;', '&#127984;', '&#127984;'];
+        let html = '<div style="text-align:center;"><h2 style="font-family:\'Noto Serif SC\',serif;margin-bottom:20px;">记忆翻牌</h2><p style="color:var(--text-secondary);margin-bottom:28px;">找出相同的非遗图标</p><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;max-width:380px;margin:0 auto 28px;">';
+        cards.forEach((c, i) => {
+            html += '<div style="aspect-ratio:1;background:var(--accent);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.8rem;cursor:pointer;color:white;" onclick="showToast(\'翻牌功能开发中\')">?</div>';
+        });
+        html += '</div><button class="game-btn" onclick="closeGame()">结束游戏</button></div>';
+        content.innerHTML = html;
+    }
+
+    /* ================================================================
+       UTILITIES
+       ================================================================ */
+    function showToast(msg) {
+        const toast = document.getElementById('toast');
+        toast.textContent = msg;
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 3000);
+    }
+    </script>
+</body>
+</html>
