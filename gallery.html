@@ -1,0 +1,1412 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>河北非遗精粹</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #1a1a1a;
+            --secondary: #f5f5f0;
+            --accent: #c9a86c;
+            --accent-light: #e8d5b5;
+            --accent-dark: #a88a4e;
+            --text-primary: #1a1a1a;
+            --text-secondary: #666666;
+            --text-light: #999999;
+            --bg-primary: #fafaf8;
+            --bg-secondary: #f0f0ec;
+            --bg-dark: #1a1a1a;
+            --border: #e5e5e0;
+            --card-bg: #ffffff;
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.04);
+            --shadow-md: 0 4px 20px rgba(0,0,0,0.08);
+            --shadow-lg: 0 8px 40px rgba(0,0,0,0.12);
+            --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-bounce: 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            --transition-jelly: 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            --navbar-height: 70px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        /* ===== Page Loader ===== */
+        .page-loader {
+            position: fixed;
+            inset: 0;
+            background: var(--bg-primary);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        .page-loader.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loader-content {
+            text-align: center;
+        }
+
+        .loader-spinner {
+            width: 60px;
+            height: 60px;
+            border: 3px solid var(--border);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loader-text {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            letter-spacing: 0.1em;
+        }
+
+        /* ===== Ripple Effect ===== */
+        .ripple-container {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(201, 168, 108, 0.4);
+            transform: scale(0);
+            animation: ripple-effect 0.6s ease-out;
+            pointer-events: none;
+        }
+
+        @keyframes ripple-effect {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+
+        /* ===== Navbar ===== */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: var(--navbar-height);
+            background: rgba(250, 250, 248, 0.92);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px;
+            z-index: 100;
+            transition: var(--transition-normal);
+        }
+
+        .navbar.scrolled {
+            border-bottom: 1px solid var(--border);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .navbar-logo {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--primary);
+            text-decoration: none;
+            letter-spacing: 0.05em;
+            position: relative;
+        }
+
+        .navbar-logo span {
+            color: var(--accent);
+            display: inline-block;
+            animation: pulse-dot 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        .navbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nav-btn {
+            padding: 8px 20px;
+            border: 2px solid var(--border);
+            border-radius: 50px;
+            background: transparent;
+            color: var(--text-primary);
+            font-size: 0.85rem;
+            font-family: inherit;
+            cursor: pointer;
+            transition: var(--transition-normal);
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--accent);
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: -1;
+        }
+
+        .nav-btn:hover::before {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+
+        .nav-btn:hover {
+            border-color: var(--accent);
+            color: #fff;
+        }
+
+        /* ===== Hero ===== */
+        .hero {
+            min-height: calc(100vh - var(--navbar-height));
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 100px 40px 60px;
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23c9a86c' fill-opacity='0.03'%3E%3Cpath d='M20 20h-1v-1h1v1zm0-20h-1V0h1v0zM0 20H0h-1v-1h1v1z'/%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.5;
+            animation: pattern-float 20s linear infinite;
+        }
+
+        @keyframes pattern-float {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(-40px, -40px); }
+        }
+
+        /* Floating particles */
+        .particles {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: var(--accent);
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: float-particle 15s infinite;
+        }
+
+        @keyframes float-particle {
+            0%, 100% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% { opacity: 0.3; }
+            90% { opacity: 0.3; }
+            100% {
+                transform: translateY(-100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 700px;
+        }
+
+        .hero-label {
+            display: inline-block;
+            padding: 6px 20px;
+            background: var(--accent-light);
+            color: var(--accent-dark);
+            font-size: 0.8rem;
+            font-weight: 500;
+            border-radius: 50px;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            margin-bottom: 30px;
+            animation: slide-down 0.8s ease-out;
+        }
+
+        @keyframes slide-down {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero h1 {
+            font-family: 'Noto Serif SC', serif;
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 20px;
+            letter-spacing: 0.05em;
+            line-height: 1.3;
+            animation: fade-up 0.8s ease-out 0.2s both;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 40px;
+            animation: fade-up 0.8s ease-out 0.4s both;
+        }
+
+        @keyframes fade-up {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-search {
+            width: 100%;
+            max-width: 560px;
+            margin: 0 auto;
+            position: relative;
+            animation: fade-up 0.8s ease-out 0.6s both;
+        }
+
+        .hero-search input {
+            width: 100%;
+            padding: 18px 60px 18px 28px;
+            font-size: 1rem;
+            font-family: inherit;
+            border: 2px solid var(--border);
+            border-radius: 50px;
+            background: var(--card-bg);
+            color: var(--text-primary);
+            transition: var(--transition-normal);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .hero-search input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 4px rgba(201, 168, 108, 0.15), var(--shadow-md);
+        }
+
+        .hero-search input::placeholder {
+            color: var(--text-light);
+        }
+
+        .hero-search button {
+            position: absolute;
+            right: 6px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 46px;
+            height: 46px;
+            border: none;
+            border-radius: 50%;
+            background: var(--accent);
+            color: #fff;
+            cursor: pointer;
+            transition: var(--transition-bounce);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+
+        .hero-search button:hover {
+            background: var(--accent-dark);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .hero-search button:active {
+            transform: translateY(-50%) scale(0.95);
+        }
+
+        .hero-decoration {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-light);
+            font-size: 0.8rem;
+            animation: float 2s ease-in-out infinite;
+            cursor: pointer;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(-8px); }
+        }
+
+        .hero-decoration i {
+            animation: bounce-arrow 1.5s ease-in-out infinite;
+        }
+
+        @keyframes bounce-arrow {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(5px); }
+        }
+
+        /* ===== Category Section ===== */
+        .category-section {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 50px 40px 20px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 30px;
+        }
+
+        .section-header h2 {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            white-space: nowrap;
+        }
+
+        .section-header .line {
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, var(--border), transparent);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .section-header .line::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 100px;
+            background: var(--accent);
+            animation: line-shimmer 2s ease-in-out infinite;
+        }
+
+        @keyframes line-shimmer {
+            0% { transform: translateX(-100px); }
+            100% { transform: translateX(calc(100% + 100px)); }
+        }
+
+        .category-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .tag {
+            padding: 10px 22px;
+            background: var(--card-bg);
+            border: 1.5px solid var(--border);
+            border-radius: 50px;
+            cursor: pointer;
+            transition: var(--transition-bounce);
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+            font-family: inherit;
+            user-select: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tag::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--accent);
+            transform: scale(0);
+            border-radius: 50px;
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            z-index: -1;
+        }
+
+        .tag:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 8px 25px rgba(201, 168, 108, 0.2);
+        }
+
+        .tag.active {
+            color: #fff;
+            border-color: var(--accent);
+            box-shadow: 0 4px 15px rgba(201, 168, 108, 0.3);
+        }
+
+        .tag.active::before {
+            transform: scale(1);
+        }
+
+        /* Tag click animation */
+        .tag.clicked {
+            animation: tag-click 0.3s ease;
+        }
+
+        @keyframes tag-click {
+            0% { transform: scale(1); }
+            50% { transform: scale(0.92); }
+            100% { transform: scale(1); }
+        }
+
+        /* ===== Gallery Grid ===== */
+        .gallery-section {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 30px 40px 80px;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 28px;
+        }
+
+        /* ===== Jelly Card Effect ===== */
+        .gallery-item {
+            background: var(--card-bg);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            transition: transform 0.1s ease-out, box-shadow var(--transition-slow);
+            position: relative;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+
+        .gallery-item:hover {
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* Jelly deformation on mouse move */
+        .gallery-item.jelly-effect {
+            transition: transform 0.05s ease-out;
+        }
+
+        .image-container {
+            position: relative;
+            width: 100%;
+            height: 240px;
+            overflow: hidden;
+            background: var(--bg-secondary);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.08);
+        }
+
+        /* Image shine effect */
+        .image-container::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.3),
+                transparent
+            );
+            transition: left 0.6s ease;
+        }
+
+        .gallery-item:hover .image-container::after {
+            left: 100%;
+        }
+
+        .image-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(transparent 40%, rgba(0,0,0,0.6) 100%);
+            opacity: 0;
+            transition: opacity var(--transition-normal);
+            display: flex;
+            align-items: flex-end;
+            padding: 20px;
+        }
+
+        .gallery-item:hover .image-overlay {
+            opacity: 1;
+        }
+
+        .overlay-text {
+            color: #fff;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 400;
+            transform: translateY(10px);
+            opacity: 0;
+            transition: var(--transition-normal);
+        }
+
+        .gallery-item:hover .overlay-text {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .overlay-text i {
+            transition: transform var(--transition-normal);
+        }
+
+        .gallery-item:hover .overlay-text i {
+            transform: translateX(4px);
+        }
+
+        .item-info {
+            padding: 20px 22px;
+            position: relative;
+        }
+
+        /* Info hover effect */
+        .item-info::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), var(--accent-light));
+            transform: scaleX(0);
+            transition: transform var(--transition-normal);
+        }
+
+        .gallery-item:hover .item-info::before {
+            transform: scaleX(1);
+        }
+
+        .item-title {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            line-height: 1.4;
+            transition: color var(--transition-normal);
+        }
+
+        .gallery-item:hover .item-title {
+            color: var(--accent-dark);
+        }
+
+        .item-location {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--text-light);
+            font-size: 0.85rem;
+        }
+
+        .item-location i {
+            color: var(--accent);
+            font-size: 0.75rem;
+            transition: transform var(--transition-normal);
+        }
+
+        .gallery-item:hover .item-location i {
+            transform: scale(1.2);
+        }
+
+        .item-category {
+            display: inline-block;
+            margin-top: 14px;
+            padding: 5px 14px;
+            background: var(--bg-secondary);
+            color: var(--accent-dark);
+            font-size: 0.75rem;
+            border-radius: 50px;
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            transition: var(--transition-normal);
+        }
+
+        .gallery-item:hover .item-category {
+            background: var(--accent-light);
+        }
+
+        /* Card entrance animation */
+        .gallery-item.fade-in {
+            opacity: 0;
+            transform: translateY(40px) scale(0.95);
+        }
+
+        .gallery-item.visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        /* ===== No Results ===== */
+        .no-results {
+            text-align: center;
+            padding: 80px 20px;
+            display: none;
+        }
+
+        .no-results.show {
+            display: block;
+            animation: fade-up 0.5s ease;
+        }
+
+        .no-results i {
+            font-size: 3.5rem;
+            color: var(--border);
+            margin-bottom: 20px;
+            display: block;
+            animation: shake 0.5s ease;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .no-results h3 {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 1.3rem;
+            color: var(--text-primary);
+            margin-bottom: 10px;
+        }
+
+        .no-results p {
+            color: var(--text-light);
+            font-size: 0.95rem;
+        }
+
+        /* ===== Footer ===== */
+        .footer {
+            background: var(--bg-dark);
+            color: rgba(255,255,255,0.7);
+            text-align: center;
+            padding: 40px 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+        }
+
+        .footer-logo {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 12px;
+            letter-spacing: 0.1em;
+        }
+
+        .footer-logo span {
+            color: var(--accent);
+        }
+
+        .footer p {
+            font-size: 0.85rem;
+            opacity: 0.6;
+        }
+
+        /* ===== Scroll to Top Button ===== */
+        .scroll-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 20px rgba(201, 168, 108, 0.4);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px);
+            transition: var(--transition-bounce);
+            z-index: 99;
+        }
+
+        .scroll-top.visible {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .scroll-top:hover {
+            background: var(--accent-dark);
+            transform: translateY(-5px) scale(1.1);
+        }
+
+        .scroll-top:active {
+            transform: scale(0.95);
+        }
+
+        /* ===== Scrollbar ===== */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent-light);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent);
+        }
+
+        /* ===== Cursor Trail Effect ===== */
+        .cursor-trail {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 9998;
+            opacity: 0.5;
+            transition: transform 0.1s ease;
+        }
+
+        /* ===== Responsive ===== */
+        @media (max-width: 1024px) {
+            .gallery-grid {
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+                gap: 20px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 0 20px;
+            }
+
+            .hero {
+                padding: 80px 20px 50px;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .category-section,
+            .gallery-section {
+                padding-left: 20px;
+                padding-right: 20px;
+            }
+
+            .gallery-grid {
+                grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+                gap: 16px;
+            }
+
+            .nav-btn {
+                padding: 6px 14px;
+                font-size: 0.8rem;
+            }
+
+            .scroll-top {
+                bottom: 20px;
+                right: 20px;
+                width: 44px;
+                height: 44px;
+            }
+
+            .cursor-trail {
+                display: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .category-tags {
+                gap: 8px;
+            }
+
+            .tag {
+                padding: 8px 16px;
+                font-size: 0.8rem;
+            }
+
+            .image-container {
+                height: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Page Loader -->
+    <div class="page-loader" id="pageLoader">
+        <div class="loader-content">
+            <div class="loader-spinner"></div>
+            <div class="loader-text">加载中...</div>
+        </div>
+    </div>
+
+    <!-- Cursor Trail -->
+    <div class="cursor-trail" id="cursorTrail"></div>
+
+    <!-- Navbar -->
+    <nav class="navbar" id="navbar">
+        <a href="#" class="navbar-logo">燕赵遗韵<span>.</span></a>
+        <div class="navbar-actions">
+            <a href="https://mike2249.github.io/hebei-heritage/hebei-intangible-heritage.html" class="nav-btn ripple-container" target="_blank">
+                <i class="fas fa-landmark"></i> 返回主页
+            </a>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="particles" id="particles"></div>
+        <div class="hero-content">
+            <span class="hero-label">Intangible Cultural Heritage</span>
+            <h1>河北非遗精粹</h1>
+            <p>精选河北各地代表性非物质文化遗产项目，<br>展现燕赵文化的独特魅力</p>
+            <div class="hero-search">
+                <input type="text" id="searchInput" placeholder="搜索非遗项目、地区或类别...">
+                <button class="ripple-container" onclick="performSearch()">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </div>
+        <div class="hero-decoration" onclick="scrollToGallery()">
+            <span>向下探索</span>
+            <i class="fas fa-chevron-down"></i>
+        </div>
+    </section>
+
+    <!-- Category Section -->
+    <section class="category-section fade-in" id="categorySection">
+        <div class="section-header">
+            <h2>分类筛选</h2>
+            <div class="line"></div>
+        </div>
+        <div class="category-tags" id="categoryTags">
+            <span class="tag ripple-container active" data-category="all">全部</span>
+            <span class="tag ripple-container" data-category="传统技艺">传统技艺</span>
+            <span class="tag ripple-container" data-category="传统美术">传统美术</span>
+            <span class="tag ripple-container" data-category="传统舞蹈">传统舞蹈</span>
+            <span class="tag ripple-container" data-category="传统戏剧">传统戏剧</span>
+            <span class="tag ripple-container" data-category="传统音乐">传统音乐</span>
+            <span class="tag ripple-container" data-category="民俗">民俗</span>
+            <span class="tag ripple-container" data-category="传统体育">传统体育</span>
+            <span class="tag ripple-container" data-category="传统医药">传统医药</span>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section class="gallery-section" id="gallerySection">
+        <div class="gallery-grid" id="galleryGrid"></div>
+        <div class="no-results" id="noResults">
+            <i class="fas fa-search"></i>
+            <h3>未找到相关结果</h3>
+            <p>请尝试其他关键词或类别</p>
+        </div>
+    </section>
+
+    <!-- Scroll to Top -->
+    <button class="scroll-top ripple-container" id="scrollTop" onclick="scrollToTop()">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-logo">燕赵遗韵<span>.</span></div>
+        <p>传承非遗文化，守护精神家园</p>
+    </footer>
+
+    <script>
+        const heritageData = [
+            { name: "蔚县剪纸", location: "张家口蔚县", category: "传统美术", description: "蔚县剪纸是中国剪纸艺术中的瑰宝，以其独特的'刻'而非'剪'的技艺闻名，色彩艳丽，构图饱满。" },
+            { name: "张家口宣化葫芦烙画", location: "张家口宣化", category: "传统美术", description: "葫芦烙画是在葫芦表面用电烙铁烫制图案的民间艺术，宣化葫芦烙画技艺精湛，图案精美。" },
+            { name: "赵州桥", location: "石家庄赵县", category: "传统技艺", description: "赵州桥是世界现存最古老的单孔敞肩石拱桥，展现了中国古代桥梁建筑的高超技艺。" },
+            { name: "安新芦苇画", location: "保定安新", category: "传统美术", description: "白洋淀芦苇画利用当地丰富的芦苇资源，通过剪、贴、烙等工艺制成精美的装饰画。" },
+            { name: "白洋淀苇编", location: "保定安新", category: "传统技艺", description: "白洋淀苇编是利用芦苇编织各种生活用品和工艺品的传统技艺，历史悠久。" },
+            { name: "保定老调", location: "保定市", category: "传统戏剧", description: "保定老调是河北省地方戏曲剧种之一，唱腔质朴激越，具有浓厚的地方特色。" },
+            { name: "保定千层底布鞋", location: "保定市", category: "传统技艺", description: "千层底布鞋制作工艺是纯手工制作布鞋的传统技艺，舒适耐穿，具有保健功能。" },
+            { name: "保定曲阳泥塑", location: "保定曲阳", category: "传统美术", description: "曲阳泥塑以当地特有的泥土为原料，造型生动，色彩鲜艳，具有浓郁的乡土气息。" },
+            { name: "保定徐水舞狮", location: "保定徐水", category: "传统舞蹈", description: "徐水舞狮是北方舞狮的代表，动作矫健，技巧高超，气势恢宏。" },
+            { name: "昌黎地秧歌", location: "秦皇岛昌黎", category: "传统舞蹈", description: "昌黎地秧歌是河北省传统民间舞蹈，动作诙谐幽默，具有浓郁的冀东特色。" },
+            { name: "承德霸王鞭", location: "承德市", category: "传统舞蹈", description: "霸王鞭是一种手持道具的民间舞蹈，节奏明快，动作豪放，深受群众喜爱。" },
+            { name: "承德板城烧锅酒", location: "承德市", category: "传统技艺", description: "板城烧锅酒传统酿造技艺历史悠久，采用独特的酿造工艺，酒香浓郁。" },
+            { name: "承德隆化王氏宫绣", location: "承德隆化", category: "传统美术", description: "王氏宫绣是清代宫廷刺绣技艺的传承，针法精细，图案华丽，色彩典雅。" },
+            { name: "承德县抬杆儿", location: "承德县", category: "民俗", description: "抬杆儿是承德县传统的民间社火表演形式，场面壮观，具有浓厚的民俗特色。" },
+            { name: "磁州焖子", location: "邯郸磁县", category: "传统技艺", description: "磁州焖子是邯郸地区的传统美食，制作工艺独特，口感筋道，风味独特。" },
+            { name: "磁州窑烧制技艺", location: "邯郸磁县", category: "传统技艺", description: "磁州窑是中国古代北方最大的民窑体系，以白地黑花装饰著称，技艺精湛。" },
+            { name: "大厂花丝", location: "廊坊大厂", category: "传统技艺", description: "花丝镶嵌是将金银拉成细丝，编织成各种图案的传统工艺，大厂花丝工艺精细。" },
+            { name: "定瓷烧制技艺", location: "保定曲阳", category: "传统技艺", description: "定窑是宋代五大名窑之一，定瓷以白瓷著称，胎薄釉润，纹饰精美。" },
+            { name: "定州缂丝织造技艺", location: "保定定州", category: "传统技艺", description: "缂丝是中国传统丝织工艺中的精华，有'一寸缂丝一寸金'之说，技艺极为复杂。" },
+            { name: "定州焖子", location: "保定定州", category: "传统技艺", description: "定州焖子是河北定州的传统名吃，以猪肉和淀粉制成，口感独特。" },
+            { name: "丰宁布糊画", location: "承德丰宁", category: "传统美术", description: "布糊画是用布料粘贴成画的民间艺术，色彩艳丽，立体感强，具有浓郁的满族特色。" },
+            { name: "丰宁满族剪纸", location: "承德丰宁", category: "传统美术", description: "丰宁满族剪纸保留了满族传统文化特色，图案粗犷豪放，具有鲜明的民族风格。" },
+            { name: "藁城宫灯", location: "石家庄藁城", category: "传统技艺", description: "藁城宫灯起源于东汉，是纯手工制作的传统灯笼，造型美观，工艺精湛。" },
+            { name: "固安柳编", location: "廊坊固安", category: "传统技艺", description: "固安柳编是利用柳条编织各种器具的传统技艺，产品美观实用，经久耐用。" },
+            { name: "邯郸太极拳", location: "邯郸市", category: "传统体育", description: "邯郸是太极拳的重要发源地之一，杨式、武式太极拳均起源于此。" },
+            { name: "河北梆子", location: "河北省", category: "传统戏剧", description: "河北梆子是河北省主要地方戏曲剧种，唱腔高亢激越，表演粗犷豪放。" },
+            { name: "河间西河大鼓", location: "沧州河间", category: "传统音乐", description: "西河大鼓是北方鼓书艺术的重要曲种，唱腔丰富，表演生动，深受群众喜爱。" },
+            { name: "井陉拉花", location: "石家庄井陉", category: "传统舞蹈", description: "井陉拉花是井陉县传统民间舞蹈，动作刚柔并济，具有独特的艺术魅力。" },
+            { name: "景泰蓝制作技艺", location: "保定市", category: "传统技艺", description: "景泰蓝是著名特种金属工艺品类之一，制作工艺复杂，色彩绚丽华贵。" },
+            { name: "饶阳刻铜", location: "衡水饶阳", category: "传统美术", description: "饶阳刻铜是在铜器表面雕刻图案的传统技艺，刀法精湛，图案精美。" },
+            { name: "石家庄常山战鼓", location: "石家庄市", category: "传统音乐", description: "常山战鼓是石家庄市的传统民间鼓乐，气势恢宏，节奏明快，具有震撼力。" },
+            { name: "石家庄丝弦", location: "石家庄市", category: "传统戏剧", description: "石家庄丝弦是河北省地方戏曲剧种，唱腔独特，表演细腻，具有浓郁的地方特色。" },
+            { name: "石家庄无极剪纸", location: "石家庄无极", category: "传统美术", description: "无极剪纸风格粗犷豪放，线条流畅，具有浓郁的乡土气息和地方特色。" },
+            { name: "石家庄正定高照", location: "石家庄正定", category: "民俗", description: "高照是正定县传统的民间社火表演形式，场面壮观，具有浓厚的地方特色。" },
+            { name: "滕氏布糊画", location: "承德市", category: "传统美术", description: "滕氏布糊画是布糊画的重要流派，工艺精细，色彩艳丽，立体感强。" },
+            { name: "蔚县打树花", location: "张家口蔚县", category: "民俗", description: "打树花是蔚县传统的民俗活动，将熔化的铁水泼洒到墙上，火花四溅，蔚为壮观。" },
+            { name: "邢台广宗柳编", location: "邢台广宗", category: "传统技艺", description: "广宗柳编历史悠久，编织技艺精湛，产品种类繁多，美观实用。" },
+            { name: "邢台巨鹿四股弦", location: "邢台巨鹿", category: "传统戏剧", description: "四股弦是邢台地区的传统戏曲剧种，唱腔独特，具有浓郁的地方特色。" },
+            { name: "邢台梅花拳", location: "邢台市", category: "传统体育", description: "梅花拳是中国传统武术的重要流派，起源于邢台，讲究内外兼修。" },
+            { name: "邢窑白瓷烧制技艺", location: "邢台市内丘", category: "传统技艺", description: "邢窑是唐代著名瓷窑，白瓷'类雪类银'，在中国陶瓷史上占有重要地位。" },
+            { name: "雄县古乐", location: "保定雄县", category: "传统音乐", description: "雄县古乐是古老的民间音乐形式，保留了古代音乐的韵味，具有重要研究价值。" },
+            { name: "徐水舞狮", location: "保定徐水", category: "传统舞蹈", description: "徐水舞狮是北方舞狮的代表，动作矫健，技巧高超，气势恢宏。" },
+            { name: "张家口崇礼树皮画", location: "张家口崇礼", category: "传统美术", description: "树皮画是利用树皮的自然纹理和色彩创作的民间艺术，具有独特的自然美感。" },
+            { name: "武强年画", location: "衡水武强", category: "传统美术", description: "武强年画是中国北方年画的代表，构图饱满，色彩鲜艳，具有浓郁的乡土气息。" },
+            { name: "吴桥杂技", location: "沧州吴桥", category: "传统技艺", description: "吴桥杂技历史悠久，技艺精湛，被誉为'杂技之乡'，享誉中外。" },
+            { name: "曲阳石雕", location: "保定曲阳", category: "传统技艺", description: "曲阳石雕历史悠久，技艺精湛，是中国北方石雕艺术的代表。" },
+            { name: "衡水内画", location: "衡水市", category: "传统美术", description: "衡水内画是在鼻烟壶内壁绘画的绝技，笔触精细，堪称鬼斧神工。" }
+        ];
+
+        const imageMap = {
+            "蔚县剪纸": "images/00188957-0bf2-44c2-893c-212b830bba91_8f1e9d64-acb3-4bf9-90de-65c469af0aa1_蔚县剪纸.jpg",
+            "张家口宣化葫芦烙画": "images/01cb1cb6-a9b5-4ca6-858d-60f9ff60816f_3d613f5d-cb37-42ab-8706-d9244bc6cae9_张家口宣化葫芦烙画.webp",
+            "赵州桥": "images/592399fc-6357-4fc7-9edc-40db01ae58c3_270582ee-e190-40a5-a498-240ccb91199b_赵州桥.jpg",
+            "安新芦苇画": "images/ad42e717-0b05-48a9-801b-d7f80590e119_80b8155e-e7cb-4527-8ea3-d6176d01b22e_安新芦苇画.jpg",
+            "白洋淀苇编": "images/780f8116-7032-461b-a005-282810f19cb8_70f5b3f7-f9a1-49ef-a9ef-22f9b2507893_白洋淀苇编.jpg",
+            "保定老调": "images/668098de-6292-4064-b37f-bf8780d4fab1_5462ba44-87bd-4ad7-a94f-2348b59a0b99_保定老调.png",
+            "保定千层底布鞋": "images/46a8546e-9770-4392-9e06-f6189661fee4_b5fc2243-3620-4ae9-b5d2-4809acf06446_保定千层底布鞋制作工艺.jpg",
+            "保定曲阳泥塑": "images/248245c2-ac93-4ff1-b5ec-9c2587953eaa_117f9866-1f4d-446a-997c-c05322dbef1c_保定曲阳泥塑.jpg",
+            "保定徐水舞狮": "images/c6e20c60-5d4a-4c90-85c1-2fd62a7fa5c6_74bd31bf-ad2f-4d85-b059-ec9731fec18b_保定徐水舞狮.png",
+            "昌黎地秧歌": "images/3ee5e38d-ffc1-4900-8ce0-ec6d13232f3f_005c4ed8-ed76-4c94-9c3a-8a8f5daceacd_昌黎地秧歌.jpg",
+            "承德霸王鞭": "images/17a45b62-896f-4b1b-b71b-ac0b2842f9f2_1a519525-a32e-431d-99de-90a467f525c4_承德霸王鞭.jpg",
+            "承德板城烧锅酒": "images/d850d9cf-58f8-4881-a608-53f7817d15f5_fcdc2877-0ec4-4b16-a192-d356ecbf60a5_承德板城烧锅酒.jpg",
+            "承德隆化王氏宫绣": "images/65f5b9a8-d5d7-4dcc-8f89-896baedc9181_b8f52579-2a6f-4b0d-a42a-c3526501b30f_承德隆化王氏宫绣.jpg",
+            "承德县抬杆儿": "images/b2a5cccf-4050-43e6-9a6c-1ba313349a1a_88674788-87ea-4fa5-80a5-34f4d34785ce_承德县抬杆儿.jpg",
+            "磁州焖子": "images/11d2b8fc-2f59-4db9-ba66-350cda8b6fab_f7aab905-f99d-45b9-ae32-3736aea374ab_磁州焖子.jpg",
+            "磁州窑烧制技艺": "images/f62a7df2-dae8-46cc-9acc-d64130a65ba2_680a6200-0d22-4f0b-8489-de7fe3485d9c_磁州窑烧制技艺.jpg",
+            "大厂花丝": "images/61e88f72-fcf6-4220-8df6-93565acc1f2e_363fc500-37de-4da1-9a07-aa59bcf09bf0_大厂花丝.jpg",
+            "定瓷烧制技艺": "images/36ddacf2-a386-4ea5-a0d6-9f781b5aee0e_9178474a-3c8a-428b-acdc-d62fe904c4d9_定瓷烧制技艺.jpg",
+            "定州缂丝织造技艺": "images/022b4ed6-406c-43f4-929c-7b6ad5732ce2_24681729-30c2-418c-938a-8ca37da91c74_定州缂丝织造技艺.jpg",
+            "定州焖子": "images/eadbdeb8-f722-4ad4-9c0c-45cca3c6b7ac_b08a18ae-0484-4988-90db-2db3d3335a32_定州焖子.webp",
+            "丰宁布糊画": "images/a818382f-4046-4088-a14f-ba6e748b70b4_96880334-4643-49b5-998e-e8cac8869635_丰宁布糊画.jpg",
+            "丰宁满族剪纸": "images/e2f30780-3174-40c2-acd5-e0f0805aae31_6cae630c-a8d6-4b92-aa5d-cfb7b77dcf66_丰宁满族剪纸.jpg",
+            "藁城宫灯": "images/76cd1234-2fb1-4428-b094-44007464273a_70654cba-8864-4ea7-9760-ef005ea74880_藁城宫灯.jpg",
+            "固安柳编": "images/2e61a3d5-9692-46bf-80d3-ed70ba1c167a_db8783aa-002d-432d-a8b5-df37dda7c6c6_固安柳编.jpg",
+            "邯郸太极拳": "images/1ec28a5a-b4f1-4948-8aa6-5406ad2399ea_ffac03e8-c10e-48bb-a21a-1b0bbcbf36e1_邯郸太极拳.jpg",
+            "河北梆子": "images/e0a222e7-3ea6-4fab-8856-ef2739351d97_09ff5feb-5ab0-4b46-a7b9-66e7ec063e76_河北梆子.jpg",
+            "河间西河大鼓": "images/079f8266-4ee8-4f81-abc5-2c4052b77117_938a2476-452f-41bf-a243-a44eebb9688d_河间西河大鼓.png",
+            "井陉拉花": "images/ad2d7388-f3c9-4596-ab1a-0b9de93aae24_103b3b42-f3eb-489f-befe-e2dd424edac0_井陉拉花.jpg",
+            "景泰蓝制作技艺": "images/dd80a228-3218-4874-a4c0-0057423d6da4_b10d05f2-60e6-46b4-8de8-c0303433196a_景泰蓝制作技艺.png",
+            "饶阳刻铜": "images/030f9996-2bee-4419-8311-5e54cbc898ab_34a364dc-a40f-448b-a41a-10730fad739f_饶阳刻铜.jpg",
+            "石家庄常山战鼓": "images/771044fb-a813-421b-a889-5736807542df_31dc8aef-a1ce-4dbc-b907-50303657252a_石家庄常山战鼓.webp",
+            "石家庄丝弦": "images/63446911-f47c-4c1f-ad3e-5523ff869605_60cd6672-3274-46a2-9a34-d794fb97e46a_石家庄丝弦.jpg",
+            "石家庄无极剪纸": "images/b2f6cef5-5a94-422a-92c5-4202495906b9_b5c84b2e-097b-44f0-bb31-68ca91130b33_石家庄无极剪纸.jpg",
+            "石家庄正定高照": "images/e2651c24-4c55-4fea-8b1d-9c77b1b4afd1_de839cf4-0f22-4bef-ad2a-607a6f5647a6_石家庄正定高照.jpg",
+            "滕氏布糊画": "images/2cda6d57-d66e-421e-b072-3171ad0d8d29_831c1385-f1e5-4613-a0a0-d3c2dabc7440_滕氏布糊画.jpg",
+            "蔚县打树花": "images/fb395201-ec71-48f9-9479-ef2c9d7f558b_a681407f-16c6-4e83-bc3d-9d57da106d19_蔚县打树花.jpg",
+            "邢台广宗柳编": "images/44fffcb1-04ee-4c14-92a8-085f2f47338b_7855902c-51f7-459a-ac35-159e8bcba062_邢台广宗柳编.jpg",
+            "邢台巨鹿四股弦": "images/1d8c1632-a74d-4f7a-b92a-db64057e07f9_ba2bbd85-e252-402a-a667-1a12fd5171ac_邢台巨鹿四股弦.jpg",
+            "邢台梅花拳": "images/da6611d4-d52a-47cf-a861-dfa5f9ffa89c_56dae420-062c-4c7e-9b2d-9d5054d0bbaa_邢台梅花拳.jpg",
+            "邢窑白瓷烧制技艺": "images/b9261293-41ed-461f-a4e9-ae320444d791_ae087063-b247-4678-bcda-92e30be5ae86_邢窑白瓷烧制技艺.jpg",
+            "雄县古乐": "images/c5e41508-8f68-4b67-ae8a-3102920bbc75_48a5d871-c692-45fe-a561-a4f7ff09fdac_雄县古乐.jpg",
+            "徐水舞狮": "images/09ef6c5d-8495-4982-94cf-5fb1304296ff_abf30c95-f92a-4ba5-a236-5ef5dc5e8858_徐水舞狮.jpg",
+            "张家口崇礼树皮画": "images/4ce110ea-30ff-4d6e-a428-257cd1c5cf66_e8e55015-09a7-4e00-be09-52a64a8264aa_张家口崇礼树皮画.png",
+            "武强年画": "images/0ab2adb5-c3f9-4558-a5d6-6e33c9a75b8a_0fa7378b-5e8c-4f83-bea6-ea92d34df6a8_武强年画.webp",
+            "吴桥杂技": "images/9d0e8bef-15cb-43a2-8730-00ebead6827b_03efbea3-556d-47ef-bf8a-fc7303929b01_吴桥杂技.webp",
+            "曲阳石雕": "images/62025c45-66f4-4022-9caa-ceb0c85599f7_1938a2d0-140a-4a81-a62d-98c8a20ab759_曲阳石雕.jpg",
+            "衡水内画": "images/f0757582-cd72-4e68-96ea-a8abcc0a1293_100ff875-27d0-4046-9efc-0a8a7075eb59_衡水内画.png"
+        };
+
+        let currentCategory = 'all';
+        let searchQuery = '';
+        let lastScrollY = 0;
+        let scrollVelocity = 0;
+        let ticking = false;
+
+        function getImageSrc(name) {
+            return imageMap[name] || '';
+        }
+
+        // ===== Page Loader =====
+        function hideLoader() {
+            setTimeout(() => {
+                document.getElementById('pageLoader').classList.add('hidden');
+            }, 500);
+        }
+
+        // ===== Create Particles =====
+        function createParticles() {
+            const container = document.getElementById('particles');
+            for (let i = 0; i < 20; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 15 + 's';
+                particle.style.animationDuration = (15 + Math.random() * 10) + 's';
+                container.appendChild(particle);
+            }
+        }
+
+        // ===== Ripple Effect =====
+        function createRipple(event) {
+            const element = event.currentTarget;
+            const rect = element.getBoundingClientRect();
+            const ripple = document.createElement('span');
+            ripple.className = 'ripple';
+            
+            const size = Math.max(rect.width, rect.height);
+            ripple.style.width = ripple.style.height = size + 'px';
+            ripple.style.left = (event.clientX - rect.left - size / 2) + 'px';
+            ripple.style.top = (event.clientY - rect.top - size / 2) + 'px';
+            
+            element.appendChild(ripple);
+            
+            setTimeout(() => ripple.remove(), 600);
+        }
+
+        // ===== Cursor Trail =====
+        function initCursorTrail() {
+            const trail = document.getElementById('cursorTrail');
+            let mouseX = 0, mouseY = 0;
+            let trailX = 0, trailY = 0;
+            
+            document.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+            });
+            
+            function animateTrail() {
+                trailX += (mouseX - trailX) * 0.15;
+                trailY += (mouseY - trailY) * 0.15;
+                trail.style.left = trailX - 10 + 'px';
+                trail.style.top = trailY - 10 + 'px';
+                requestAnimationFrame(animateTrail);
+            }
+            animateTrail();
+        }
+
+        // ===== Jelly Effect for Cards =====
+        function initJellyEffect() {
+            const cards = document.querySelectorAll('.gallery-item');
+            
+            cards.forEach(card => {
+                let currentTransform = { x: 0, y: 0, scale: 1 };
+                let targetTransform = { x: 0, y: 0, scale: 1 };
+                
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    
+                    // Calculate rotation based on mouse position
+                    const rotateX = (y - centerY) / centerY * -8;
+                    const rotateY = (x - centerX) / centerX * 8;
+                    
+                    // Add scroll velocity influence for jelly effect
+                    const jellyFactor = Math.min(Math.abs(scrollVelocity) / 50, 1);
+                    const jellyScale = 1 + jellyFactor * 0.05;
+                    
+                    targetTransform = {
+                        x: rotateX,
+                        y: rotateY,
+                        scale: jellyScale
+                    };
+                });
+                
+                card.addEventListener('mouseleave', () => {
+                    targetTransform = { x: 0, y: 0, scale: 1 };
+                });
+                
+                // Smooth animation loop
+                function animate() {
+                    currentTransform.x += (targetTransform.x - currentTransform.x) * 0.1;
+                    currentTransform.y += (targetTransform.y - currentTransform.y) * 0.1;
+                    currentTransform.scale += (targetTransform.scale - currentTransform.scale) * 0.1;
+                    
+                    card.style.transform = `perspective(1000px) rotateX(${currentTransform.x}deg) rotateY(${currentTransform.y}deg) scale(${currentTransform.scale})`;
+                    
+                    requestAnimationFrame(animate);
+                }
+                animate();
+            });
+        }
+
+        // ===== Scroll Velocity Detection =====
+        function initScrollVelocity() {
+            window.addEventListener('scroll', () => {
+                scrollVelocity = window.scrollY - lastScrollY;
+                lastScrollY = window.scrollY;
+                
+                if (!ticking) {
+                    requestAnimationFrame(() => {
+                        // Apply jelly effect based on scroll velocity
+                        const cards = document.querySelectorAll('.gallery-item');
+                        cards.forEach(card => {
+                            const velocityFactor = Math.min(Math.abs(scrollVelocity) / 100, 1);
+                            const skewY = scrollVelocity > 0 ? velocityFactor * 2 : -velocityFactor * 2;
+                            card.style.setProperty('--scroll-skew', skewY + 'deg');
+                        });
+                        ticking = false;
+                    });
+                    ticking = true;
+                }
+            });
+        }
+
+        function init() {
+            hideLoader();
+            createParticles();
+            initCursorTrail();
+            initScrollVelocity();
+            renderGallery();
+            setupEventListeners();
+            setupScrollEffects();
+            
+            // Initialize jelly effect after cards are rendered
+            setTimeout(initJellyEffect, 100);
+        }
+
+        function renderGallery() {
+            const grid = document.getElementById('galleryGrid');
+            const noResults = document.getElementById('noResults');
+            grid.innerHTML = '';
+
+            const filteredData = heritageData.filter(item => {
+                const matchesCategory = currentCategory === 'all' || item.category === currentCategory;
+                const matchesSearch = !searchQuery ||
+                    item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    item.location.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    item.category.toLowerCase().includes(searchQuery.toLowerCase());
+                return matchesCategory && matchesSearch;
+            });
+
+            if (filteredData.length === 0) {
+                noResults.classList.add('show');
+            } else {
+                noResults.classList.remove('show');
+                filteredData.forEach((item, index) => {
+                    const card = createGalleryCard(item, index);
+                    grid.appendChild(card);
+                });
+            }
+        }
+
+        function createGalleryCard(item, index) {
+            const a = document.createElement('a');
+            a.className = 'gallery-item fade-in';
+            a.href = `detail/${item.name}.html`;
+            const imgSrc = getImageSrc(item.name);
+
+            a.innerHTML = `
+                <div class="image-container">
+                    <img src="${imgSrc}" alt="${item.name}" loading="lazy" onerror="this.src='https://placehold.co/400x300/c9a86c/FFFFFF?text=${encodeURIComponent(item.name)}'">
+                    <div class="image-overlay">
+                        <span class="overlay-text">
+                            <i class="fas fa-arrow-right"></i> 查看详情
+                        </span>
+                    </div>
+                </div>
+                <div class="item-info">
+                    <h3 class="item-title">${item.name}</h3>
+                    <div class="item-location">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>${item.location}</span>
+                    </div>
+                    <span class="item-category">${item.category}</span>
+                </div>
+            `;
+
+            // Staggered entrance animation
+            setTimeout(() => { 
+                a.classList.add('visible'); 
+            }, index * 80);
+            
+            return a;
+        }
+
+        function setupEventListeners() {
+            const searchInput = document.getElementById('searchInput');
+            searchInput.addEventListener('input', (e) => {
+                searchQuery = e.target.value.trim();
+                renderGallery();
+                setTimeout(initJellyEffect, 200);
+            });
+
+            searchInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') performSearch();
+            });
+
+            const tags = document.querySelectorAll('.tag');
+            tags.forEach(tag => {
+                tag.addEventListener('click', function(e) {
+                    // Ripple effect
+                    createRipple(e);
+                    
+                    // Click animation
+                    this.classList.add('clicked');
+                    setTimeout(() => this.classList.remove('clicked'), 300);
+                    
+                    // Update active state
+                    tags.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    currentCategory = this.dataset.category;
+                    renderGallery();
+                    setTimeout(initJellyEffect, 200);
+                });
+            });
+
+            // Ripple for buttons
+            document.querySelectorAll('.ripple-container').forEach(el => {
+                el.addEventListener('click', createRipple);
+            });
+        }
+
+        function setupScrollEffects() {
+            const navbar = document.getElementById('navbar');
+            const scrollTop = document.getElementById('scrollTop');
+            const categorySection = document.getElementById('categorySection');
+
+            window.addEventListener('scroll', () => {
+                // Navbar effect
+                navbar.classList.toggle('scrolled', window.scrollY > 50);
+                
+                // Scroll to top button
+                if (window.scrollY > 500) {
+                    scrollTop.classList.add('visible');
+                } else {
+                    scrollTop.classList.remove('visible');
+                }
+            });
+
+            // Intersection Observer for fade-in
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            observer.observe(categorySection);
+        }
+
+        function performSearch() {
+            searchQuery = document.getElementById('searchInput').value.trim();
+            renderGallery();
+            setTimeout(initJellyEffect, 200);
+        }
+
+        function scrollToGallery() {
+            document.getElementById('categorySection').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>

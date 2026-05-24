@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>武强年画 - 河北非遗精粹</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #1a1a1a;
+            --secondary: #f5f5f0;
+            --accent: #c9a86c;
+            --accent-light: #e8d5b5;
+            --accent-dark: #a88a4e;
+            --text-primary: #1a1a1a;
+            --text-secondary: #666666;
+            --text-light: #999999;
+            --bg-primary: #fafaf8;
+            --bg-secondary: #f0f0ec;
+            --bg-dark: #1a1a1a;
+            --border: #e5e5e0;
+            --card-bg: #ffffff;
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.04);
+            --shadow-md: 0 4px 20px rgba(0,0,0,0.08);
+            --shadow-lg: 0 8px 40px rgba(0,0,0,0.12);
+            --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-bounce: 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            --navbar-height: 70px;
+            --sidebar-width: 280px;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        /* Page Loader */
+        .page-loader {
+            position: fixed; inset: 0;
+            background: var(--bg-primary);
+            z-index: 9999;
+            display: flex; align-items: center; justify-content: center;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+        .page-loader.hidden { opacity: 0; visibility: hidden; }
+        .loader-spinner {
+            width: 50px; height: 50px;
+            border: 3px solid var(--border);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Ripple Effect */
+        .ripple-container { position: relative; overflow: hidden; }
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(201, 168, 108, 0.4);
+            transform: scale(0);
+            animation: ripple-effect 0.6s ease-out;
+            pointer-events: none;
+        }
+        @keyframes ripple-effect { to { transform: scale(4); opacity: 0; } }
+
+        /* Navbar */
+        .navbar {
+            position: fixed; top: 0; left: 0; right: 0;
+            height: var(--navbar-height);
+            background: rgba(250, 250, 248, 0.92);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 40px; z-index: 100;
+            border-bottom: 1px solid var(--border);
+            transition: var(--transition-normal);
+        }
+        .navbar-logo {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 1.3rem; font-weight: 600;
+            color: var(--primary); text-decoration: none; letter-spacing: 0.05em;
+        }
+        .navbar-logo span { color: var(--accent); display: inline-block; animation: pulse-dot 2s ease-in-out infinite; }
+        @keyframes pulse-dot { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.2); } }
+        .navbar-actions { display: flex; align-items: center; gap: 12px; }
+        .nav-btn {
+            padding: 8px 20px; border: 2px solid var(--border);
+            border-radius: 50px; background: transparent;
+            color: var(--text-primary); font-size: 0.85rem;
+            font-family: inherit; cursor: pointer;
+            transition: var(--transition-normal); text-decoration: none;
+            position: relative; overflow: hidden;
+        }
+        .nav-btn::before {
+            content: ''; position: absolute; inset: 0;
+            background: var(--accent);
+            transform: scaleX(0); transform-origin: right;
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: -1;
+        }
+        .nav-btn:hover::before { transform: scaleX(1); transform-origin: left; }
+        .nav-btn:hover { border-color: var(--accent); color: #fff; }
+
+        /* Hero Image */
+        .detail-hero {
+            margin-top: var(--navbar-height);
+            width: 100%; height: 60vh; min-height: 400px; max-height: 600px;
+            overflow: hidden; position: relative;
+            background: var(--bg-dark);
+        }
+        .detail-hero img {
+            width: 100%; height: 100%; object-fit: cover;
+            opacity: 0.9;
+            animation: hero-zoom 20s ease-in-out infinite alternate;
+        }
+        @keyframes hero-zoom { from { transform: scale(1); } to { transform: scale(1.05); } }
+        .detail-hero::after {
+            content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+            height: 60%;
+            background: linear-gradient(transparent, var(--bg-primary));
+        }
+        .hero-content {
+            position: absolute; bottom: 60px; left: 0; right: 0;
+            z-index: 2; text-align: center;
+            padding: 0 20px;
+            animation: fade-up 0.8s ease-out;
+        }
+        @keyframes fade-up { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        .hero-category {
+            display: inline-block;
+            padding: 6px 16px;
+            background: var(--accent);
+            color: white;
+            font-size: 0.8rem;
+            border-radius: 20px;
+            margin-bottom: 16px;
+            letter-spacing: 0.1em;
+            animation: slide-down 0.8s ease-out;
+        }
+        @keyframes slide-down { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+        .hero-title {
+            font-family: 'Noto Serif SC', serif;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 700;
+            color: white;
+            text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+            margin-bottom: 12px;
+        }
+        .hero-location {
+            color: rgba(255,255,255,0.9);
+            font-size: 1rem;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+        }
+
+        /* Main Layout */
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px;
+            display: grid;
+            grid-template-columns: var(--sidebar-width) 1fr;
+            gap: 40px;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: sticky;
+            top: calc(var(--navbar-height) + 40px);
+            height: fit-content;
+        }
+        .sidebar-menu {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: var(--shadow-sm);
+        }
+        .sidebar-title {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--accent-light);
+        }
+        .sidebar-nav { list-style: none; }
+        .sidebar-nav li { margin-bottom: 4px; }
+        .sidebar-nav a {
+            display: flex; align-items: center; gap: 10px;
+            padding: 10px 12px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-radius: 8px;
+            transition: var(--transition-bounce);
+            font-size: 0.9rem;
+            position: relative;
+        }
+        .sidebar-nav a::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 3px;
+            height: 0;
+            background: var(--accent);
+            border-radius: 2px;
+            transition: height var(--transition-normal);
+        }
+        .sidebar-nav a:hover, .sidebar-nav a.active {
+            background: var(--bg-secondary);
+            color: var(--accent-dark);
+            padding-left: 16px;
+        }
+        .sidebar-nav a:hover::before, .sidebar-nav a.active::before {
+            height: 60%;
+        }
+        .sidebar-nav a i {
+            width: 20px;
+            text-align: center;
+            color: var(--accent);
+        }
+
+        /* Content Area */
+        .content-area { min-width: 0; }
+
+        /* Section Cards */
+        .section-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow-sm);
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        .section-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .section-header {
+            display: flex; align-items: center; gap: 12px;
+            margin-bottom: 24px;
+        }
+        .section-icon {
+            width: 44px; height: 44px;
+            background: linear-gradient(135deg, var(--accent-light), var(--accent));
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            color: white;
+            font-size: 1.1rem;
+            transition: transform var(--transition-bounce);
+        }
+        .section-card:hover .section-icon {
+            transform: scale(1.1) rotate(5deg);
+        }
+        .section-title {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        /* Introduction */
+        .intro-text {
+            font-size: 1.05rem;
+            line-height: 2;
+            color: var(--text-secondary);
+            text-indent: 2em;
+        }
+
+        /* Quote Block */
+        .quote-block {
+            background: linear-gradient(135deg, var(--bg-secondary), var(--bg-primary));
+            border-left: 4px solid var(--accent);
+            padding: 32px 36px;
+            border-radius: 0 16px 16px 0;
+            margin: 30px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        .quote-block::before {
+            content: '"';
+            position: absolute;
+            top: -20px;
+            right: 20px;
+            font-size: 8rem;
+            font-family: 'Noto Serif SC', serif;
+            color: var(--accent);
+            opacity: 0.1;
+        }
+        .quote-icon {
+            font-size: 2rem;
+            color: var(--accent);
+            opacity: 0.3;
+            margin-bottom: 8px;
+        }
+        .quote-block blockquote {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 1.25rem;
+            color: var(--text-primary);
+            line-height: 1.8;
+            font-style: italic;
+        }
+        .quote-source {
+            margin-top: 16px;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 8px;
+            top: 8px;
+            bottom: 8px;
+            width: 2px;
+            background: linear-gradient(to bottom, var(--accent), var(--accent-light));
+        }
+        .timeline-item {
+            position: relative;
+            padding-bottom: 28px;
+            opacity: 0;
+            transform: translateX(-20px);
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+        .timeline-item.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        .timeline-item:last-child { padding-bottom: 0; }
+        .timeline-dot {
+            position: absolute;
+            left: -26px;
+            top: 4px;
+            width: 16px; height: 16px;
+            background: var(--accent);
+            border-radius: 50%;
+            border: 3px solid var(--card-bg);
+            box-shadow: 0 0 0 2px var(--accent);
+            transition: transform var(--transition-bounce);
+        }
+        .timeline-item:hover .timeline-dot {
+            transform: scale(1.3);
+        }
+        .timeline-period {
+            font-family: 'Noto Serif SC', serif;
+            font-weight: 600;
+            color: var(--accent-dark);
+            font-size: 1rem;
+            margin-bottom: 6px;
+        }
+        .timeline-text {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        /* Craft Steps */
+        .craft-steps { display: grid; gap: 20px; }
+        .craft-step {
+            display: flex; align-items: flex-start; gap: 20px;
+            padding: 24px;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            transition: var(--transition-normal);
+            cursor: default;
+        }
+        .craft-step:hover {
+            transform: translateX(8px);
+            box-shadow: var(--shadow-sm);
+            background: linear-gradient(135deg, var(--bg-secondary), var(--accent-light));
+        }
+        .step-number {
+            width: 40px; height: 40px;
+            background: var(--accent);
+            color: white;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 600;
+            font-size: 1rem;
+            flex-shrink: 0;
+            transition: transform var(--transition-bounce);
+        }
+        .craft-step:hover .step-number {
+            transform: scale(1.1) rotate(360deg);
+        }
+        .step-content { flex: 1; }
+        .step-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 6px;
+        }
+        .step-desc {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        /* Inheritors */
+        .inheritors-grid { display: grid; gap: 16px; }
+        .inheritor-card {
+            display: flex; align-items: flex-start; gap: 16px;
+            padding: 20px;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            transition: var(--transition-normal);
+        }
+        .inheritor-card:hover {
+            box-shadow: var(--shadow-sm);
+            transform: translateY(-4px);
+        }
+        .inheritor-avatar {
+            width: 56px; height: 56px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            color: white;
+            font-size: 1.4rem;
+            font-weight: 600;
+            font-family: 'Noto Serif SC', serif;
+            flex-shrink: 0;
+            transition: transform var(--transition-bounce);
+        }
+        .inheritor-card:hover .inheritor-avatar {
+            transform: scale(1.1);
+        }
+        .inheritor-info { flex: 1; }
+        .inheritor-name {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+        .inheritor-title {
+            font-size: 0.8rem;
+            color: var(--accent-dark);
+            margin-bottom: 6px;
+        }
+        .inheritor-desc {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* Related Items */
+        .related-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        .related-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition-bounce);
+            text-decoration: none;
+        }
+        .related-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: var(--shadow-md);
+        }
+        .related-image {
+            aspect-ratio: 3/2;
+            overflow: hidden;
+        }
+        .related-image img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+        .related-card:hover .related-image img {
+            transform: scale(1.1);
+        }
+        .related-info { padding: 16px; }
+        .related-name {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+            font-size: 0.95rem;
+        }
+        .related-category {
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+
+        /* Navigation Cards */
+        .detail-nav {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 40px;
+        }
+        .nav-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition-bounce);
+            text-decoration: none;
+            border: 2px solid transparent;
+        }
+        .nav-card:hover {
+            border-color: var(--accent-light);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+        }
+        .nav-label {
+            font-size: 0.8rem;
+            color: var(--text-light);
+            margin-bottom: 8px;
+            display: flex; align-items: center; gap: 6px;
+        }
+        .nav-title {
+            font-family: 'Noto Serif SC', serif;
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 1.1rem;
+        }
+        .nav-card:hover .nav-title { color: var(--accent-dark); }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            display: flex; align-items: center; gap: 8px;
+            margin-bottom: 30px;
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+        .breadcrumb a {
+            color: var(--accent-dark);
+            text-decoration: none;
+            transition: var(--transition-normal);
+        }
+        .breadcrumb a:hover { color: var(--accent); }
+
+        /* Scroll to Top */
+        .scroll-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 20px rgba(201, 168, 108, 0.4);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px);
+            transition: var(--transition-bounce);
+            z-index: 99;
+        }
+        .scroll-top.visible {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        .scroll-top:hover {
+            background: var(--accent-dark);
+            transform: translateY(-5px) scale(1.1);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--bg-dark);
+            color: rgba(255,255,255,0.7);
+            text-align: center;
+            padding: 50px 20px;
+            margin-top: 60px;
+            position: relative;
+            overflow: hidden;
+        }
+        .footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+        }
+        .footer-logo {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 12px;
+            letter-spacing: 0.1em;
+        }
+        .footer-logo span { color: var(--accent); }
+        .footer p { font-size: 0.9rem; opacity: 0.6; }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .main-container { grid-template-columns: 1fr; }
+            .sidebar { position: relative; top: 0; order: -1; }
+            .sidebar-menu { padding: 16px; }
+            .sidebar-nav { display: flex; flex-wrap: wrap; gap: 8px; }
+            .sidebar-nav li { margin: 0; }
+            .sidebar-nav a { padding: 8px 14px; font-size: 0.85rem; background: var(--bg-secondary); border-radius: 20px; }
+            .sidebar-title { display: none; }
+        }
+        @media (max-width: 768px) {
+            .navbar { padding: 0 20px; }
+            .main-container { padding: 20px; }
+            .section-card { padding: 24px; }
+            .detail-hero { height: 50vh; min-height: 300px; }
+            .hero-content { bottom: 40px; }
+            .detail-nav { grid-template-columns: 1fr; }
+            .related-grid { grid-template-columns: 1fr; }
+            .scroll-top { bottom: 20px; right: 20px; width: 44px; height: 44px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-loader" id="pageLoader">
+        <div class="loader-spinner"></div>
+    </div>
+
+    <nav class="navbar">
+        <a href="../gallery.html" class="navbar-logo">燕赵遗韵<span>.</span></a>
+        <div class="navbar-actions">
+            <a href="../gallery.html" class="nav-btn ripple-container"><i class="fas fa-th-large"></i> 返回图库</a>
+        </div>
+    </nav>
+
+    <div class="detail-hero">
+        <img src="../images/0ab2adb5-c3f9-4558-a5d6-6e33c9a75b8a_0fa7378b-5e8c-4f83-bea6-ea92d34df6a8_武强年画.webp" alt="武强年画" onerror="this.src='https://placehold.co/1200x600/c9a86c/FFFFFF?text=武强年画'">
+        <div class="hero-content">
+            <div class="hero-category">传统美术</div>
+            <h1 class="hero-title">武强年画</h1>
+            <div class="hero-location"><i class="fas fa-map-marker-alt"></i> 衡水武强</div>
+        </div>
+    </div>
+
+    <div class="main-container">
+        <aside class="sidebar">
+            <div class="sidebar-menu">
+                <div class="sidebar-title">目录导航</div>
+                <ul class="sidebar-nav">
+                    <li><a href="#intro" class="active"><i class="fas fa-info-circle"></i> 项目简介</a></li>
+                    <li><a href="#history"><i class="fas fa-history"></i> 历史渊源</a></li>
+                    <li><a href="#craft"><i class="fas fa-tools"></i> 制作工艺</a></li>
+                    <li><a href="#inheritors"><i class="fas fa-users"></i> 传承人物</a></li>
+                    <li><a href="#related"><i class="fas fa-th-large"></i> 相关推荐</a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <main class="content-area">
+            <div class="breadcrumb">
+                <a href="../gallery.html">河北非遗精粹</a>
+                <i class="fas fa-chevron-right" style="font-size:0.6rem"></i>
+                <span>传统美术</span>
+                <i class="fas fa-chevron-right" style="font-size:0.6rem"></i>
+                <span style="color:var(--text-primary)">武强年画</span>
+            </div>
+
+            <section class="section-card" id="intro">
+                <div class="section-header">
+                    <div class="section-icon"><i class="fas fa-info-circle"></i></div>
+                    <h2 class="section-title">项目简介</h2>
+                </div>
+                <p class="intro-text">武强年画是中国北方年画的杰出代表，构图饱满，色彩鲜明，具有浓郁的乡土气息。与天津杨柳青、山东潍坊、苏州桃花坞并称中国四大年画。</p>
+                <div class="quote-block" id="quote"><div class="quote-icon"><i class="fas fa-quote-left"></i></div><blockquote>年画贴出喜庆来，武强版画传万家</blockquote><div class="quote-source">—— 民间谚语</div></div>
+            </section>
+
+            <section class="section-card" id="history">
+                <div class="section-header">
+                    <div class="section-icon"><i class="fas fa-history"></i></div>
+                    <h2 class="section-title">历史渊源</h2>
+                </div>
+                <div class="timeline"><div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-content"><div class="timeline-period">宋代</div><div class="timeline-text">起源于宋代</div></div></div><div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-content"><div class="timeline-period">明清</div><div class="timeline-text">达到鼎盛</div></div></div><div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-content"><div class="timeline-period">现代</div><div class="timeline-text">2006年列入国家级非遗名录</div></div></div></div>
+            </section>
+
+            <section class="section-card" id="craft">
+                <div class="section-header">
+                    <div class="section-icon"><i class="fas fa-tools"></i></div>
+                    <h2 class="section-title">制作工艺</h2>
+                </div>
+                <div class="craft-steps"><div class="craft-step"><div class="step-number">1</div><div class="step-content"><div class="step-title">绘稿</div><div class="step-desc">绘制画稿</div></div></div><div class="craft-step"><div class="step-number">2</div><div class="step-content"><div class="step-title">刻版</div><div class="step-desc">木版雕刻</div></div></div><div class="craft-step"><div class="step-number">3</div><div class="step-content"><div class="step-title">印刷</div><div class="step-desc">套色印刷</div></div></div><div class="craft-step"><div class="step-number">4</div><div class="step-content"><div class="step-title">装裱</div><div class="step-desc">装裱成品</div></div></div></div>
+            </section>
+
+            <section class="section-card" id="inheritors">
+                <div class="section-header">
+                    <div class="section-icon"><i class="fas fa-users"></i></div>
+                    <h2 class="section-title">传承人物</h2>
+                </div>
+                <div class="inheritors-grid"><div class="inheritor-card"><div class="inheritor-avatar">武</div><div class="inheritor-info"><div class="inheritor-name">武强年画艺人</div><div class="inheritor-title">传承群体</div><div class="inheritor-desc">武强年画艺人代代相传</div></div></div></div>
+            </section>
+
+            <section class="section-card" id="related">
+                <div class="section-header">
+                    <div class="section-icon"><i class="fas fa-th-large"></i></div>
+                    <h2 class="section-title">相关推荐</h2>
+                </div>
+                <div class="related-grid"><a href="蔚县剪纸.html" class="related-card ripple-container"><div class="related-image"><img src="../images/00188957-0bf2-44c2-893c-212b830bba91_8f1e9d64-acb3-4bf9-90de-65c469af0aa1_蔚县剪纸.jpg" alt="蔚县剪纸" onerror="this.src='https://placehold.co/300x200/c9a86c/FFFFFF?text=蔚县剪纸'"></div><div class="related-info"><div class="related-name">蔚县剪纸</div><div class="related-category">传统美术</div></div></a><a href="石家庄无极剪纸.html" class="related-card ripple-container"><div class="related-image"><img src="../images/b2f6cef5-5a94-422a-92c5-4202495906b9_b5c84b2e-097b-44f0-bb31-68ca91130b33_石家庄无极剪纸.jpg" alt="石家庄无极剪纸" onerror="this.src='https://placehold.co/300x200/c9a86c/FFFFFF?text=石家庄无极剪纸'"></div><div class="related-info"><div class="related-name">石家庄无极剪纸</div><div class="related-category">传统美术</div></div></a></div>
+            </section>
+
+            <div class="detail-nav"><a href="张家口崇礼树皮画.html" class="nav-card ripple-container"><div class="nav-label"><i class="fas fa-arrow-left"></i> 上一个</div><div class="nav-title">张家口崇礼树皮画</div></a><a href="吴桥杂技.html" class="nav-card ripple-container"><div class="nav-label">下一个 <i class="fas fa-arrow-right"></i></div><div class="nav-title">吴桥杂技</div></a></div>
+        </main>
+    </div>
+
+    <button class="scroll-top ripple-container" id="scrollTop" onclick="scrollToTop()">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <footer class="footer">
+        <div class="footer-logo">燕赵遗韵<span>.</span></div>
+        <p>传承非遗文化，守护精神家园</p>
+    </footer>
+
+    <script>
+        // Hide loader
+        setTimeout(() => document.getElementById('pageLoader').classList.add('hidden'), 300);
+
+        // Ripple effect
+        document.querySelectorAll('.ripple-container').forEach(el => {
+            el.addEventListener('click', function(e) {
+                const rect = this.getBoundingClientRect();
+                const ripple = document.createElement('span');
+                ripple.className = 'ripple';
+                const size = Math.max(rect.width, rect.height);
+                ripple.style.width = ripple.style.height = size + 'px';
+                ripple.style.left = (e.clientX - rect.left - size / 2) + 'px';
+                ripple.style.top = (e.clientY - rect.top - size / 2) + 'px';
+                this.appendChild(ripple);
+                setTimeout(() => ripple.remove(), 600);
+            });
+        });
+
+        // Smooth scroll
+        document.querySelectorAll('.sidebar-nav a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    document.querySelectorAll('.sidebar-nav a').forEach(l => l.classList.remove('active'));
+                    this.classList.add('active');
+                }
+            });
+        });
+
+        // Intersection Observer for sections
+        const sections = document.querySelectorAll('.section-card');
+        const navLinks = document.querySelectorAll('.sidebar-nav a');
+        const timelineItems = document.querySelectorAll('.timeline-item');
+        
+        const sectionObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    navLinks.forEach(link => {
+                        link.classList.remove('active');
+                        if (link.getAttribute('href') === '#' + entry.target.id) {
+                            link.classList.add('active');
+                        }
+                    });
+                }
+            });
+        }, { threshold: 0.2 });
+        
+        sections.forEach(section => sectionObserver.observe(section));
+
+        // Timeline items animation
+        const timelineObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => entry.target.classList.add('visible'), index * 150);
+                }
+            });
+        }, { threshold: 0.3 });
+        
+        timelineItems.forEach(item => timelineObserver.observe(item));
+
+        // Scroll to top button
+        const scrollTopBtn = document.getElementById('scrollTop');
+        window.addEventListener('scroll', () => {
+            scrollTopBtn.classList.toggle('visible', window.scrollY > 500);
+        });
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
